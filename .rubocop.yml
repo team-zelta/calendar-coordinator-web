@@ -1,0 +1,31 @@
+---
+require:
+  - rubocop-performance
+
+AllCops:
+  TargetRubyVersion: 3.0
+  NewCops: enable
+  Exclude:
+    - _snippets/*
+  
+Metrics/BlockLength:
+  Enabled: true
+  Exclude:
+    - spec/**/*
+    - Rakefile
+
+Security/YAMLLoad:
+  Enabled: true
+  Exclude:
+    - spec/**/*
+
+Style/HashSyntax:
+  Enabled: true
+  Exclude:
+    - Rakefile
+
+Style/SymbolArray:
+  Enabled: true
+  Exclude:
+    - db/migrations/**/*
+    - Rakefile
