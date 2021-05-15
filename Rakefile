@@ -11,6 +11,11 @@ task :console => :print_env do
   sh 'pry -r ./spec/test_load_all'
 end
 
+desc 'Check Vulnerable Dependencies'
+task :audit do
+  sh 'bundle audit check --update'
+end
+
 desc 'Check Style and Performance'
 task :style do
   sh 'rubocop .'

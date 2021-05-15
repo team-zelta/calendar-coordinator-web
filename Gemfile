@@ -18,6 +18,7 @@ gem 'pry'
 gem 'http'
 
 # Security
+gem 'bundler-audit'
 gem 'rbnacl' # assumes libsodium package already installed
 
 # Development
