@@ -1,0 +1,5 @@
+.force-wrap {
+  word-wrap:break-word;
+  width:100%;
+  display:block;
+}

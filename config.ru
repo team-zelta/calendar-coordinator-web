@@ -3,4 +3,4 @@
 require './require_app'
 require_app
 
-run Credence::App.freeze.app
+run CalendarCoordinator::App.freeze.app
