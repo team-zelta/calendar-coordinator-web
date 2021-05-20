@@ -16,7 +16,7 @@ module CalendarCoordinator
 
         # POST /auth/login
         routing.post do
-          account = AuthenticateAccount.new(App.config).call(
+          account = AccountService.new(App.config).authenticate(
             username: routing.params['username'],
             password: routing.params['password']
           )

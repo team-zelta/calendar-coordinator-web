@@ -5,14 +5,17 @@ link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-soc
 div class="row"
   div class="col-sm-4"
   div class="col-sm-4"
-    h3 class="text-center" Login
-    form method='post' action='/auth/login' id='form-login'
+    h3 class="text-center" Register
+    form method='post' action='/account/register' id='form-register'
       div class="form-group"
         label for='input-username' Username
         input type='text' name='username' id='input-username' class="form-control"
       div class="form-group"
+        label for='input-email' Email
+        input type='text' name='email' id='input-email' class="form-control"
+      div class="form-group"
         label for='input-password' Password
         input type='password' name='password' id='input-password' class="form-control"
       br
-      button type='submit' id='button-login' value='login' class="btn btn-primary btn-block" login
+      button type='submit' id='button-register' value='register' class="btn btn-primary btn-block" register
   div class="col-sm-4"

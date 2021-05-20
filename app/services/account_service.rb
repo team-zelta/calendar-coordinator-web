@@ -4,17 +4,28 @@ require 'http'
 
 module CalendarCoordinator
   # Returns an authenticated user, or nil
-  class AuthenticateAccount
+  class AccountService
     class UnauthorizedError < StandardError; end
 
     def initialize(config)
       @config = config
     end
 
-    def call(username:, password:)
+    # Account authenticate
+    def authenticate(username:, password:)
       response = HTTP.post("#{@config.API_URL}/auth/authenticate",
                            json: { username: username, password: password })
       raise(UnauthorizedError) unless response.code == 200
+
+      JSON.parse(response.body)
+    end
+
+    # Account register
+    def register(username:, email:, password:)
+      response = HTTP.post("#{@config.API_URL}/accounts",
+                           json: { username: username, email: email, password: password })
+
+      raise('Register failed') unless response.code == 201
 
       JSON.parse(response.body)
     end
