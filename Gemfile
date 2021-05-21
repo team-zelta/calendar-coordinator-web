@@ -21,6 +21,9 @@ gem 'http'
 gem 'bundler-audit'
 gem 'rbnacl' # assumes libsodium package already installed
 
+# Https
+gem 'rack-ssl-enforcer'
+
 # Development
 group :development do
   gem 'rubocop'
