@@ -5,10 +5,10 @@
 # This workflow will download a prebuilt Ruby version, install dependencies and run tests with Rake
 # For more information see: https://github.com/marketplace/actions/setup-ruby-jruby-and-truffleruby
 
-name: Quality-Check
+name: Deploy
 
 on:
-  pull_request:
+  push:
     branches: [ main ]
 
 jobs:
@@ -42,3 +42,15 @@ jobs:
     
     - name: Check Style and Performance
       run: bundle exec rake style
+
+  deploy:
+    needs: Quality-Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: "calendar-coordinator-web" #Must be unique in Heroku
+          heroku_email: "t.tienyulin@gmail.com"
+    

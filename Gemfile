@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 source 'https://rubygems.org'
+ruby File.read('.ruby-version').strip
 
 # Web
 gem 'puma'
@@ -23,6 +24,12 @@ gem 'rbnacl' # assumes libsodium package already installed
 
 # Google
 gem 'google-apis-calendar_v3'
+
+# Https
+gem 'rack-ssl-enforcer'
+
+# Session
+gem 'redis-rack'
 
 # Development
 group :development do
