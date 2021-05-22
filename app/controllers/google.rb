@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 require 'roda'
-require 'google/apis/calendar_v3'
 require 'googleauth'
-require 'googleauth/stores/file_token_store'
+require 'googleauth/stores/redis_token_store'
+require 'google/apis/calendar_v3'
 require 'date'
 require 'fileutils'
 require_relative './app'
@@ -13,34 +13,43 @@ module CalendarCoordinator
   # Web controller for CalendarCoordinator API
   class App < Roda
     include GoogleCalendar
-    route('google') do |routing|
-      routing.is 'calendar' do
+    route('google') do |routing| # rubocop:disable Metrics/BlockLength
+      routing.is 'calendar' do # rubocop:disable Metrics/BlockLength
         user_id = 'default'
-        request = nil
+
+        client_id = Google::Auth::ClientId
+                    .new('27551357076-6a99f359fpf69c37g0fsdcf9q5rfc5l7.apps.googleusercontent.com',
+                         '8rZRcYXVTRKK5QnOzJaUMpSn')
+        scope = Google::Apis::CalendarV3::AUTH_CALENDAR_READONLY
+        token_store = Google::Auth::Stores::RedisTokenStore.new(redis: Redis.new(url: App.config.REDIS_URL))
+
+        authorizer = Google::Auth::WebUserAuthorizer.new(client_id, scope, token_store)
+        credentials = authorizer.get_credentials(user_id, request)
+
+        routing.redirect authorizer.get_authorization_url(login_hint: user_id, request: request) unless credentials
 
         calendar = Google::Apis::CalendarV3::CalendarService.new
-        authorizer = GoogleCalendarService.authorizer(Google::Apis::CalendarV3::AUTH_CALENDAR_READONLY)
-        credentials = GoogleCalendarService.credentials(authorizer)
-        routing.redirect GoogleCalendarService.authorization_url(user_id: user_id, request: request) unless credentials
-
         calendar.authorization = credentials
-        routing.redirect @login_route
+
         calendar_id = 'primary'
-        response = calendar.list_events(calendar_id,
+        @events = calendar.list_events(calendar_id,
                                        max_results: 10,
                                        single_events: true,
                                        order_by: 'startTime',
                                        time_min: Time.now.iso8601)
 
-        puts "Upcoming events:"
-        puts "No upcoming events found" if response.items.empty?
-        response.items.each do |event|
+        @events.items.each do |event|
           start = event.start.date || event.start.date_time
           puts "- #{event.summary} (#{start})"
         end
 
-        view :home
+        routing.redirect '/'
       end
+    end
+
+    route('oauth2callback') do |routing|
+      target_url = Google::Auth::WebUserAuthorizer.handle_auth_callback_deferred(request)
+      routing.redirect target_url
     end
   end
 end
