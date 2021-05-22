@@ -19,7 +19,6 @@ class SecureSession
   end
 
   def self.wipe_redis_sessions
-    puts @redis_url
     redis = Redis.new(url: @redis_url)
     redis.keys.each { |session_id| redis.del session_id } # rubocop:disable Style/HashEachMethods
   end
