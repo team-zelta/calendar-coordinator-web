@@ -149,6 +149,7 @@ DEPENDENCIES
   bundler-audit
   figaro
   google-apis-calendar_v3
+  googleauth
   http
   pry
   puma
