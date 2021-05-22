@@ -25,6 +25,9 @@ gem 'rbnacl' # assumes libsodium package already installed
 # Https
 gem 'rack-ssl-enforcer'
 
+# Session
+gem 'redis-rack'
+
 # Development
 group :development do
   gem 'rubocop'
