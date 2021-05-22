@@ -29,5 +29,9 @@ module CalendarCoordinator
         exec 'pry -r ./spec/test_load_all'
       end
     end
+
+    configure :production do
+      use Rack::SslEnforcer, hsts: true
+    end
   end
 end

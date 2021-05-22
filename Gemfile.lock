@@ -42,6 +42,7 @@ GEM
     puma (5.3.1)
       nio4r (~> 2.0)
     rack (2.2.3)
+    rack-ssl-enforcer (0.2.9)
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
     rainbow (3.0.0)
@@ -94,6 +95,7 @@ DEPENDENCIES
   http
   pry
   puma
+  rack-ssl-enforcer
   rack-test
   rake
   rbnacl
@@ -102,6 +104,9 @@ DEPENDENCIES
   rubocop
   rubocop-performance
   slim
+
+RUBY VERSION
+   ruby 3.0.1p64
 
 BUNDLED WITH
    2.2.16
