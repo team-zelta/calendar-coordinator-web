@@ -1,0 +1,21 @@
+h1 Owned Calendar
+
+div class = "row"
+  table class="table"
+    thead 
+      tr 
+        th scope="col" id 
+        th scope="col" summary
+        th scope="col" description
+        th scope="col" location
+        th scope="col" time_zone
+        th scope="col" access_role
+    tbody 
+    - @calendar_list.items.each do |calendar|
+      tr
+        td=calendar.id 
+        td=calendar.summary
+        td=calendar.description 
+        td=calendar.location
+        td=calendar.time_zone 
+        td=calendar.access_role

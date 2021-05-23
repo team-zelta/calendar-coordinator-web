@@ -30,7 +30,9 @@ module CalendarCoordinator
         calendar = Google::Apis::CalendarV3::CalendarService.new
         calendar.authorization = credentials
 
-        routing.redirect '/'
+        @calendar_list = calendar.list_calendar_lists
+
+        view 'calendar', locals: { calendar_list: @calendar_list }
       end
     end
 
