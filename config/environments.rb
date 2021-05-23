@@ -45,12 +45,12 @@ module CalendarCoordinator
       # use Rack::Session::Cookie,
       #     expire_after: ONE_MONTH, secret: config.SESSION_SECRET
 
-      use Rack::Session::Pool,
-          expire_after: ONE_MONTH
+      # use Rack::Session::Pool,
+      #     expire_after: ONE_MONTH
 
-      # use Rack::Session::Redis,
-      #     expire_after: ONE_MONTH,
-      #     redis_server: ENV.delete('REDIS_URL')
+      use Rack::Session::Redis,
+          expire_after: ONE_MONTH,
+          redis_server: ENV.delete('REDIS_URL')
     end
 
     configure :production do

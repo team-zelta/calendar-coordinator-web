@@ -23,7 +23,8 @@ module CalendarCoordinator
           SecureSession.new(session).set(:current_account, account)
           flash[:notice] = "Welcome back #{account['username']}!"
           routing.redirect '/'
-        rescue StandardError
+        rescue StandardError => e
+          API.logger.error "UNKOWN ERROR: #{e.message}"
           flash[:error] = 'Username and password did not match our records'
           routing.redirect @login_route
         end
