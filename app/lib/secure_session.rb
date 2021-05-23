@@ -5,6 +5,8 @@ require_relative 'secure_message'
 
 # Encrypt and Decrypt JSON encoded sessions
 class SecureSession
+  attr_reader :redis_url
+
   ## Any use of this library must setup configuration information
   def self.setup(redis_url)
     @redis_url = redis_url
@@ -19,7 +21,6 @@ class SecureSession
   end
 
   def self.wipe_redis_sessions
-    puts @redis_url
     redis = Redis.new(url: @redis_url)
     redis.keys.each { |session_id| redis.del session_id } # rubocop:disable Style/HashEachMethods
   end

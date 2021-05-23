@@ -22,6 +22,10 @@ gem 'http'
 gem 'bundler-audit'
 gem 'rbnacl' # assumes libsodium package already installed
 
+# Google
+gem 'google-apis-calendar_v3'
+gem 'googleauth'
+
 # Https
 gem 'rack-ssl-enforcer'
 
