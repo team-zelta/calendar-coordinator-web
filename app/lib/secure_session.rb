@@ -5,6 +5,8 @@ require_relative 'secure_message'
 
 # Encrypt and Decrypt JSON encoded sessions
 class SecureSession
+  attr_reader :redis_url
+
   ## Any use of this library must setup configuration information
   def self.setup(redis_url)
     @redis_url = redis_url
