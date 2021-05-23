@@ -50,7 +50,7 @@ module CalendarCoordinator
 
       use Rack::Session::Redis,
           expire_after: ONE_MONTH,
-          redis_server: ENV.delete('REDIS_URL')
+          redis_server: ENV['REDIS_URL'] # REDIS_URL used again in google
     end
 
     configure :production do
@@ -58,7 +58,7 @@ module CalendarCoordinator
 
       use Rack::Session::Redis,
           expire_after: ONE_MONTH,
-          redis_server: ENV.delete('REDIS_URL')
+          redis_server: ENV['REDIS_URL'] # REDIS_URL used again in google
     end
   end
 end
