@@ -25,7 +25,10 @@ module CalendarCoordinator
         current_account = SecureSession.new(session).get(:current_account)
         user_id = current_account['email']
 
-        credentials = GoogleAuthService.oauth2(routing, user_id, request, CLIENT_ID, SCOPE, TOKEN_STORE)
+        # Google OAuth2
+        authorizer = GoogleAuthService.authorizer(CLIENT_ID, SCOPE, TOKEN_STORE)
+        credentials = GoogleAuthService.credentials(authorizer, user_id, request)
+        routing.redirect GoogleAuthService.authorization_url(authorizer, user_id, request) unless credentials
 
         calendar = Google::Apis::CalendarV3::CalendarService.new
         calendar.authorization = credentials
