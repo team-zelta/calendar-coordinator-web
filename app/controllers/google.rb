@@ -8,6 +8,7 @@ require 'date'
 require 'fileutils'
 require_relative './app'
 require_relative '../services/google_auth_service'
+require_relative '../services/calendar_service'
 
 module CalendarCoordinator
   # Web controller for CalendarCoordinator API
@@ -33,9 +34,14 @@ module CalendarCoordinator
         calendar = Google::Apis::CalendarV3::CalendarService.new
         calendar.authorization = credentials
 
+        # Get calendar list from Google Calendar API
         @calendar_list = calendar.list_calendar_lists
 
-        view 'calendar', locals: { calendar_list: @calendar_list }
+        # Save calendar to Database
+        calendar_service = CalendarService.new(App.config)
+        calendar_service.save(account_id: current_account['id'], calendars: @calendar_list.items)
+
+        view 'home', locals: { current_account: @current_account }
       end
     end
 
