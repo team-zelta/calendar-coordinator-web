@@ -11,11 +11,12 @@ div class = "row"
         th scope="col" time_zone
         th scope="col" access_role
     tbody 
-    - @calendar_list.items.each do |calendar|
-      tr
-        td=calendar.id 
-        td=calendar.summary
-        td=calendar.description 
-        td=calendar.location
-        td=calendar.time_zone 
-        td=calendar.access_role
+    - if @calendar_list
+        - @calendar_list.each do |calendar|
+          tr
+            td=calendar.id 
+            td=calendar.summary
+            td=calendar.description 
+            td=calendar.location
+            td=calendar.time_zone 
+            td=calendar.access_role
