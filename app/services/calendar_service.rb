@@ -32,7 +32,7 @@ module CalendarCoordinator
 
       response = HTTP.post("#{@config.API_URL}/accounts/#{account_id}/calendars", json: calendar_lists)
 
-      raise('Register failed') unless response.code == 201
+      raise('Save failed') unless response.code == 201
 
       JSON.parse(response.body)
     end
