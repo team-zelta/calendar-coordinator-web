@@ -50,7 +50,10 @@ module CalendarCoordinator
 
       use Rack::Session::Redis,
           expire_after: ONE_MONTH,
-          redis_server: ENV['REDIS_URL'] # REDIS_URL used again in google
+          redis_server: {
+            url: ENV['REDIS_TLS_URL'], # REDIS_URL used again in google
+            ssl_params: { verify_mode: OpenSSL::SSL::VERIFY_NONE }
+          }
     end
 
     configure :production do
@@ -58,7 +61,10 @@ module CalendarCoordinator
 
       use Rack::Session::Redis,
           expire_after: ONE_MONTH,
-          redis_server: ENV['REDIS_URL'] # REDIS_URL used again in google
+          redis_server: {
+            url: ENV['REDIS_TLS_URL'], # REDIS_URL used again in google
+            ssl_params: { verify_mode: OpenSSL::SSL::VERIFY_NONE }
+          }
     end
   end
 end
