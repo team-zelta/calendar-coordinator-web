@@ -7,6 +7,8 @@ module CalendarCoordinator
   class AccountService
     class UnauthorizedError < StandardError; end
 
+    class InvalidAcountError < StandardError; end
+
     def initialize(config)
       @config = config
     end
@@ -25,7 +27,7 @@ module CalendarCoordinator
       response = HTTP.post("#{@config.API_URL}/accounts",
                            json: { username: username, email: email, password: password })
 
-      raise('Register failed') unless response.code == 201
+      raise InvalidAcountError unless response.code == 201
 
       JSON.parse(response.body)
     end

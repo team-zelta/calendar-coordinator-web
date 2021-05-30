@@ -14,17 +14,22 @@ module CalendarCoordinator
           view :register
         end
 
-        # POST /account/register
-        routing.post do
-          account = AccountService.new(App.config).register(
-            username: routing.params['username'],
-            email: routing.params['email'],
+        # POST /account/register/{registration_token}
+        routing.post String do |registration_token|
+          account = SecureMessage.decrypt(registration_token)
+          raise('account is nil') unless account
+
+          AccountService.new(App.config).register(
+            username: account['username'],
+            email: account['email'],
             password: routing.params['password']
           )
-          raise('account is nil') unless account
 
           flash[:notice] = 'Register success, you can login now!'
           routing.redirect @login_route
+        rescue InvalidAcountError
+          flash[:error] = 'This Account can not be registered.'
+          routing.redirect '/auth/register'
         rescue StandardError
           flash[:error] = 'Register failed, please try again'
           routing.redirect '/account/register'
