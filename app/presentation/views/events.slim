@@ -1,0 +1,18 @@
+h1 Events 
+
+div class = "row"
+  table class="table"
+    thead 
+      tr 
+        th scope="col" id 
+        th scope="col" summary
+        th scope="col" start_date_time
+        th scope="col" end_date_time
+    tbody 
+    - if events
+        - events.each do |event|
+          tr
+            td=event.id 
+            td=event.summary
+            td=event.start_date_time 
+            td=event.end_date_time
