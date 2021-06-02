@@ -1,0 +1,21 @@
+h1 All Events 
+
+div class = "row"
+  table class="table"
+    thead 
+      tr 
+        th scope="col" calendar_id
+        th scope="col" id 
+        th scope="col" summary
+        th scope="col" start_date_time
+        th scope="col" end_date_time
+    tbody 
+    - if @event_list
+        - @event_list.each do |calendar|
+            - calendar.events.each do |event|
+              tr
+                td=calendar.calendar_id 
+                td=event.id 
+                td=event.summary
+                td=event.start_date_time 
+                td=event.end_date_time

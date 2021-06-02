@@ -2,6 +2,7 @@
 
 require 'http'
 require 'json'
+require 'date'
 
 module CalendarCoordinator
   # Calendar Service
@@ -35,6 +36,26 @@ module CalendarCoordinator
       raise('Save failed') unless response.code == 201
 
       JSON.parse(response.body)
+    end
+
+    # Get Common Busy Time
+    def list_common_busy_time(group_id:, calendar_mode:, date:)
+      datetime = "#{DateTime.parse(date).year}-#{DateTime.parse(date).month}-#{DateTime.parse(date).day}"
+
+      response = HTTP.get("#{@config.API_URL}/groups/#{group_id}/common-busy-time/#{calendar_mode}/#{datetime}")
+      raise('Get Common Busy Time failed') unless response.code == 200
+
+      JSON.parse(response.body, object_class: OpenStruct)
+    end
+
+    # Get all events
+    def list_events(group_id:, calendar_mode:, date:)
+      datetime = "#{DateTime.parse(date).year}-#{DateTime.parse(date).month}-#{DateTime.parse(date).day}"
+
+      response = HTTP.get("#{@config.API_URL}/groups/#{group_id}/events/#{calendar_mode}/#{datetime}")
+      raise('Get All Events failed') unless response.code == 200
+
+      JSON.parse(response.body, object_class: OpenStruct)
     end
   end
 end
