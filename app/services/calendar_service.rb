@@ -47,5 +47,15 @@ module CalendarCoordinator
 
       JSON.parse(response.body, object_class: OpenStruct)
     end
+
+    # Get all events
+    def list_events(group_id:, calendar_mode:, date:)
+      datetime = "#{DateTime.parse(date).year}-#{DateTime.parse(date).month}-#{DateTime.parse(date).day}"
+
+      response = HTTP.get("#{@config.API_URL}/groups/#{group_id}/events/#{calendar_mode}/#{datetime}")
+      raise('Get All Events failed') unless response.code == 200
+
+      JSON.parse(response.body, object_class: OpenStruct)
+    end
   end
 end
