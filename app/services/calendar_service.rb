@@ -11,6 +11,14 @@ module CalendarCoordinator
       @config = config
     end
 
+    # Get all calendars of the current user
+    def list_calendars(current_account)
+      response = HTTP.auth("Bearer #{current_account.auth_token}")
+                     .get("#{@config.API_URL}/calendars")
+
+      response.code == 200 ? JSON.parse(response.to_s)['data'] : nil
+    end
+
     # Save Calendar to Database
     def save(account_id:, calendars:) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
       calendar_lists = []
