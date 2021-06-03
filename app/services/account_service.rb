@@ -17,9 +17,16 @@ module CalendarCoordinator
     def authenticate(username:, password:)
       response = HTTP.post("#{@config.API_URL}/auth/authenticate",
                            json: { username: username, password: password })
-      raise(UnauthorizedError) unless response.code == 200
 
-      JSON.parse(response.body)
+      raise(UnauthorizedError) if response.code == 403
+      raise(ApiServerError) if response.code != 200
+
+      account_info = JSON.parse(response.to_s)['attributes']
+
+      {
+        account: account_info['account']['attributes'],
+        auth_token: account_info['auth_token']
+      }
     end
 
     # Account register
