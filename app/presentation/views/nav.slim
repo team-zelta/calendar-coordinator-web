@@ -8,7 +8,7 @@ nav role="navigation" class="navbar navbar-expand-sm navbar-dark bg-primary"
 
     div class="collapse navbar-collapse" id="mainNavbar"
       ul class="navbar-nav me-auto"
-        - if @current_account
+        - if @current_account.logged_in?
           li class="nav-item"
             a class="nav-link" href="/calendars/" Calendars
           li class="nav-item"

@@ -10,6 +10,10 @@ module CalendarCoordinator
 
     attr_reader :account_info, :auth_token
 
+    def id
+      @account_info ? @account_info['id'] : nil
+    end
+
     def username
       @account_info ? @account_info['username'] : nil
     end

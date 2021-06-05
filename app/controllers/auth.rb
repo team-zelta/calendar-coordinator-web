@@ -68,7 +68,7 @@ module CalendarCoordinator
       routing.on 'logout' do
         # GET /auth/logout
         routing.get do
-          SecureSession.new(session).delete(:current_account)
+          CurrentSession.new(session).delete
           routing.redirect @login_route
         end
       end

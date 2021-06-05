@@ -16,7 +16,7 @@ module CalendarCoordinator
       response = HTTP.auth("Bearer #{current_account.auth_token}")
                      .get("#{@config.API_URL}/calendars")
 
-      response.code == 200 ? JSON.parse(response.to_s)['data'] : nil
+      response.code == 200 ? JSON.parse(response, object_class: OpenStruct).data : nil
     end
 
     # Save Calendar to Database

@@ -11,10 +11,9 @@ module CalendarCoordinator
         routing.get do
           if @current_account.logged_in?
             calendar_list = CalendarService.new(App.config).list_calendars(@current_account)
-            calendars = Calendars.new(calendar_list)
 
             view :owned_calendars,
-                 locals: { current_user: @current_account, calendars: calendars }
+                 locals: { current_user: @current_account, calendars: calendar_list }
           else
             routing.redirect '/auth/login'
           end

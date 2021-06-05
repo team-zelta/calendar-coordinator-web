@@ -11,7 +11,7 @@ div class = "row"
         th scope="col" time_zone
     tbody 
     - if calendars
-        - calendars.all.each do |calendar|
+        - calendars.each do |calendar|
           tr
             td #{calendar.id}
             td #{calendar.summary}
