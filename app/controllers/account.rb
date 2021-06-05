@@ -39,7 +39,7 @@ module CalendarCoordinator
       routing.on do
         # GET /account/login
         routing.get String do |username|
-          if @current_account && @current_account.username == username
+          if @current_account.logged_in? && @current_account.username == username
             view :account, locals: { current_account: @current_account }
           else
             routing.redirect @login_route
