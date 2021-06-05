@@ -29,7 +29,7 @@ module CalendarCoordinator
           flash[:notice] = "Welcome back #{account['username']}!"
           routing.redirect '/'
         rescue StandardError => e
-          API.logger.error "UNKOWN ERROR: #{e.message}"
+          App.logger.error "UNKOWN ERROR: #{e.message}"
           flash[:error] = 'Username and password did not match our records'
           routing.redirect @login_route
         end

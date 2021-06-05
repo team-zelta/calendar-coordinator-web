@@ -19,12 +19,15 @@ module CalendarCoordinator
                 .new('27551357076-6a99f359fpf69c37g0fsdcf9q5rfc5l7.apps.googleusercontent.com',
                      '8rZRcYXVTRKK5QnOzJaUMpSn')
     SCOPE = Google::Apis::CalendarV3::AUTH_CALENDAR_READONLY
-    TOKEN_STORE = Google::Auth::Stores::RedisTokenStore.new(redis: Redis.new(url: App.config.REDIS_URL))
+    TOKEN_STORE = Google::Auth::Stores::RedisTokenStore.new(redis: Redis.new(url: ENV['REDIS_TLS_URL'],
+                                                                             ssl_params: {
+                                                                               verify_mode: OpenSSL::SSL::VERIFY_NONE
+                                                                             }))
 
     route('google') do |routing|
       routing.is 'calendar' do
         current_account = SecureSession.new(session).get(:current_account)
-        user_id = current_account['email']
+        user_id = current_account['account']['email']
 
         # Google OAuth2
         authorizer = GoogleAuthService.authorizer(CLIENT_ID, SCOPE, TOKEN_STORE)
@@ -39,7 +42,7 @@ module CalendarCoordinator
 
         # Save calendar to Database
         calendar_service = CalendarService.new(App.config)
-        calendar_service.save(account_id: current_account['id'], calendars: @calendar_list.items)
+        calendar_service.save(account_id: current_account['account']['id'], calendars: @calendar_list.items)
 
         view 'home', locals: { current_account: @current_account }
       end

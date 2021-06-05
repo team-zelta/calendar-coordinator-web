@@ -28,7 +28,7 @@ module CalendarCoordinator
     ONE_MONTH = 30 * 24 * 60 * 60
 
     configure do
-      SecureSession.setup(ENV['REDIS_URL']) # REDIS_URL used again below
+      SecureSession.setup(ENV['REDIS_TLS_URL']) # REDIS_URL used again below
       SecureMessage.setup(ENV.delete('MSG_KEY'))
     end
 
