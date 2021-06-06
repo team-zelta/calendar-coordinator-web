@@ -21,12 +21,19 @@ module CalendarCoordinator
 
         # POST /auth/login
         routing.post do
-          account = AccountService.new(App.config).authenticate(
+          account_info = AccountService.new(App.config).authenticate(
             username: routing.params['username'],
             password: routing.params['password']
           )
-          SecureSession.new(session).set(:current_account, account)
-          flash[:notice] = "Welcome back #{account['username']}!"
+
+          current_account = CurrentAccount.new(
+            account_info[:account],
+            account_info[:auth_token]
+          )
+
+          CurrentSession.new(session).current_account = current_account
+
+          flash[:notice] = "Welcome back #{current_account.username}!"
           routing.redirect '/'
         rescue StandardError => e
           App.logger.error "UNKOWN ERROR: #{e.message}"
@@ -61,7 +68,7 @@ module CalendarCoordinator
       routing.on 'logout' do
         # GET /auth/logout
         routing.get do
-          SecureSession.new(session).delete(:current_account)
+          CurrentSession.new(session).delete
           routing.redirect @login_route
         end
       end

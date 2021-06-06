@@ -8,18 +8,18 @@ nav role="navigation" class="navbar navbar-expand-sm navbar-dark bg-primary"
 
     div class="collapse navbar-collapse" id="mainNavbar"
       ul class="navbar-nav me-auto"
-        - if @current_account
+        - if @current_account.logged_in?
           li class="nav-item"
-            a class="nav-link disabled" href="/" Projects
+            a class="nav-link" href="/calendars/" Calendars
           li class="nav-item"
             a class="nav-link" href='/google/calendar' Connect Google Calendar 
 
           li class="nav-item dropdown"
             a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"
-              = "#{@current_account['username']}"
+              = "#{@current_account.username}"
 
             div class=-"dropdown-menu"
-              a class="dropdown-item" href="/account/#{@current_account['username']}" account
+              a class="dropdown-item" href="/account/#{@current_account.username}" account
               a class="dropdown-item" href='/auth/logout' logout
         - else
           li class="nav-item"
