@@ -22,6 +22,9 @@ gem 'http'
 gem 'bundler-audit'
 gem 'rbnacl' # assumes libsodium package already installed
 
+# Validation
+gem 'dry-validation'
+
 # Google
 gem 'google-apis-calendar_v3'
 gem 'googleauth'

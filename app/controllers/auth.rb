@@ -8,6 +8,7 @@ module CalendarCoordinator
   # Web controller for CalendarCoordinator API
   class App < Roda
     include Common
+    include Form
 
     route('auth') do |routing| # rubocop:disable Metrics/BlockLength
       @login_route = '/auth/login'
@@ -45,8 +46,13 @@ module CalendarCoordinator
       routing.on 'register' do
         # POST /auth/register
         routing.post do
-          register_data = JsonRequestBody.symbolize(routing.params)
-          AuthService.new(App.config).send_register_verify_email(register_data)
+          registration = Form::Registration.new.call(routing.params)
+          if registration.failure?
+            flash[:error] = Form.validation_errors(registration)
+            routing.redirect @register_route
+          end
+
+          AuthService.new(App.config).send_register_verify_email(registration.to_h)
 
           flash[:notice] = 'Verification email has sent to you email, please check.'
           routing.redirect '/'
