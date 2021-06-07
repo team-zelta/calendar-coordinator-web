@@ -22,9 +22,15 @@ module CalendarCoordinator
 
         # POST /auth/login
         routing.post do
+          credentials = Form::LoginCredentials.new.call(routing.params)
+          if credentials.failure?
+            flash[:error] = 'Please enter both username and password'
+            routing.redirect @login_route
+          end
+
           account_info = AccountService.new(App.config).authenticate(
-            username: routing.params['username'],
-            password: routing.params['password']
+            username: credentials.to_h[:username],
+            password: credentials.to_h[:password]
           )
 
           current_account = CurrentAccount.new(
