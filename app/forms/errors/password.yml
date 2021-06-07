@@ -1,0 +1,6 @@
+en:
+  errors:
+    password: 'You must enter a password'
+    password_entropy: 'Your password needs to be longer or use unique characters'
+    password_confirm: 'You must enter a confirmation password'
+    passwords_match: 'Your passwords do not match'

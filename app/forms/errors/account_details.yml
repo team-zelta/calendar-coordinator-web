@@ -1,0 +1,4 @@
+en:
+  errors:
+    username: must be at least four English letters and numbers, with dots allowed in-between
+    email: must be a valid address
