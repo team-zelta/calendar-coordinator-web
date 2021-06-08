@@ -8,6 +8,9 @@ module CalendarCoordinator
   class App < Roda
     route('account') do |routing| # rubocop:disable Metrics/BlockLength
       @login_route = '/auth/login'
+
+      routing.redirect @login_route unless @current_account.logged_in?
+
       routing.on 'register' do
         # GET /account/register
         routing.get do
@@ -36,14 +39,12 @@ module CalendarCoordinator
         end
       end
 
-      routing.on do
-        # GET /account/login
-        routing.get String do |username|
-          if @current_account.logged_in? && @current_account.username == username
-            view :account, locals: { current_account: @current_account }
-          else
-            routing.redirect @login_route
-          end
+      # GET /account/{username}}
+      routing.get String do |username|
+        if @current_account.username == username
+          view :account, locals: { current_account: @current_account }
+        else
+          routing.redirect @login_route
         end
       end
     end

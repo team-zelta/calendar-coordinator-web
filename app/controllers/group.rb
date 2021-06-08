@@ -7,6 +7,18 @@ module CalendarCoordinator
   # Web controller for CalendarCoordinator API
   class App < Roda
     route('group') do |routing| # rubocop:disable Metrics/BlockLength
+      routing.redirect 'auth/login' unless @current_account.logged_in?
+
+      # GET /
+      routing.get do
+        group_service = GroupService.new(App.config)
+        @group_list = group_service.list(current_account: @current_account)
+
+        view :group, locals: { current_user: @current_account, group_list: @group_list }
+      rescue StandardError
+        view :group
+      end
+
       routing.on String do |group_id| # rubocop:disable Metrics/BlockLength
         routing.on 'calendar' do # rubocop:disable Metrics/BlockLength
           routing.on String do |calendar_mode|
