@@ -20,3 +20,8 @@ div class = "row"
             td=calendar.location
             td=calendar.time_zone 
             td=calendar.access_role
+
+- if group_id
+div class = "row"
+  div class="col-sm-2"
+    a class="btn btn-primary btn-block" href="/group/#{group_id}/invite" invite 

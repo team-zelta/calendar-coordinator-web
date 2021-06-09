@@ -60,7 +60,7 @@ module CalendarCoordinator
 
           AuthService.new(App.config).send_register_verify_email(registration.to_h)
 
-          flash[:notice] = 'Verification email has sent to you email, please check.'
+          flash[:notice] = 'Verification email has sent to your email, please check.'
           routing.redirect '/'
         rescue StandardError => e
           puts "Send verification email failed: #{e.inspect}"

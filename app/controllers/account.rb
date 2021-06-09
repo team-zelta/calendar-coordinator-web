@@ -9,8 +9,6 @@ module CalendarCoordinator
     route('account') do |routing| # rubocop:disable Metrics/BlockLength
       @login_route = '/auth/login'
 
-      routing.redirect @login_route unless @current_account.logged_in?
-
       routing.on 'register' do
         # GET /account/register
         routing.get do
@@ -38,6 +36,8 @@ module CalendarCoordinator
           routing.redirect '/account/register'
         end
       end
+
+      routing.redirect @login_route unless @current_account.logged_in?
 
       # GET /account/{username}}
       routing.get String do |username|
