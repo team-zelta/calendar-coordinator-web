@@ -16,7 +16,51 @@ module CalendarCoordinator
         end
       end
 
+      # GET /group/join/{invitation_token}
+      routing.on 'join' do
+        routing.get String do |invitation_token|
+          invitation = SecureMessage.decrypt(invitation_token)
+          raise('Join Group failed') unless invitation['email'] == @current_account.email
+
+          group_service = GroupService.new(App.config)
+          group_service.join(@current_account, invitation['group_id'])
+
+          flash[:notice] = 'Join Group Success!'
+          routing.redirect '/group'
+        rescue StandardError => e
+          puts e.full_message
+          flash[:error] = 'Join Group failed, please contact to the group owner to try again.'
+          routing.redirect '/group'
+        end
+      end
+
       routing.on String do |group_id| # rubocop:disable Metrics/BlockLength
+        routing.is 'invite' do
+          # GET /group/{group_id}/invite
+          routing.get do
+            view :group_invite, locals: { group_id: group_id }
+          end
+
+          # POST /group/{group_id}/invite
+          routing.post do
+            invitation = Form::Invitation.new.call(routing.params)
+            if invitation.failure?
+              flash[:error] = Form.validation_errors(invitation)
+              routing.redirect "/group/#{group_id}/invite"
+            end
+
+            GroupService.new(App.config).invite(@current_account, group_id, invitation.to_h)
+
+            flash[:notice] = 'Invitation email has sent.'
+            routing.redirect '/group'
+          rescue StandardError => e
+            puts "Send Invitation email failed: #{e.inspect}"
+            puts e.full_message
+            flash[:error] = 'Invitation failed, please try again.'
+            routing.redirect @register_route
+          end
+        end
+
         routing.on 'calendar' do # rubocop:disable Metrics/BlockLength
           # GET /group/{group_id}/calendar/list
           routing.is 'list' do
@@ -24,7 +68,7 @@ module CalendarCoordinator
               group_service = GroupService.new(App.config)
               @calendar_list = group_service.owned_calendars(group_id: group_id)
 
-              view 'calendar_list', locals: { calendar_list: @calendar_list }
+              view 'calendar_list', locals: { calendar_list: @calendar_list, group_id: group_id }
             rescue StandardError
               view 'calendar_list'
             end
