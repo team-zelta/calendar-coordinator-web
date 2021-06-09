@@ -24,5 +24,14 @@ module CalendarCoordinator
 
       JSON.parse(response.body, object_class: OpenStruct)
     end
+
+    # Create Group
+    def create(current_account:, group:)
+      response = HTTP.auth("Bearer #{current_account.auth_token}")
+                     .post("#{@config.API_URL}/groups", json: group)
+
+      puts response
+      raise('Create Group failed') unless response.code == 201
+    end
   end
 end

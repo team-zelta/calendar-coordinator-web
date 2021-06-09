@@ -1,14 +1,18 @@
-h1 Own Group and Belong Group 
+h1 Own Group and Belong Group
 
 div class = "row"
-  table class="table"
-    thead 
-      tr 
-        th scope="col" id 
-        th scope="col" groupname
-    tbody 
-    - if @group_list
-        - @group_list.each do |group|
-          tr
-            td=group.id 
-            td=group.groupname
+  div class="col-sm-12"
+    table class="table"
+      thead 
+        tr
+          th scope="col" name
+      tbody 
+      - if @group_list
+          - @group_list.each do |group|
+            tr
+              td
+                a href="/group/#{group.id}/calendar/list" #{group.groupname}
+
+div class = "row"
+  div class="col-sm-2"
+    a class="btn btn-primary btn-block" href="/group/create" create 
