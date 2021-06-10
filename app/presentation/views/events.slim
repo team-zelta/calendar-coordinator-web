@@ -4,7 +4,7 @@ div class = "row"
   table class="table"
     thead 
       tr 
-        th scope="col" calendar_id
+        th scope="col" username
         th scope="col" id 
         th scope="col" summary
         th scope="col" start_date_time
@@ -14,7 +14,7 @@ div class = "row"
         - @event_list.each do |calendar|
             - calendar.events.each do |event|
               tr
-                td=calendar.calendar_id 
+                td=calendar.username 
                 td=event.id 
                 td=event.summary
                 td=event.start_date_time 
