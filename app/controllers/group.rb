@@ -5,7 +5,7 @@ require_relative './app'
 
 module CalendarCoordinator
   # Web controller for CalendarCoordinator API
-  class App < Roda
+  class App < Roda # rubocop:disable Metrics/ClassLength
     route('group') do |routing| # rubocop:disable Metrics/BlockLength
       routing.redirect 'auth/login' unless @current_account.logged_in?
 
@@ -66,11 +66,12 @@ module CalendarCoordinator
           routing.is 'list' do
             routing.get do
               group_service = GroupService.new(App.config)
-              @calendar_list = group_service.owned_calendars(group_id: group_id)
+              owned_calendars = group_service.owned_calendars(group_id: group_id)
+              @calendar_list = owned_calendars.calendars
 
-              view 'calendar_list', locals: { calendar_list: @calendar_list, group_id: group_id }
+              view :calendar_list, locals: { group: owned_calendars.group }
             rescue StandardError
-              view 'calendar_list'
+              view :calendar_list
             end
           end
 
@@ -102,6 +103,63 @@ module CalendarCoordinator
                 view 'events'
               end
             end
+          end
+        end
+
+        # GET /group/{group_id}/setting
+        routing.is 'setting' do
+          routing.get do
+            @group_members = GroupService.new(App.config).owned_accounts(group_id: group_id)
+            @group = GroupService.new(App.config).get(@current_account, group_id)
+
+            view :group_setting, locals: { group_id: group_id }
+          end
+        end
+
+        routing.on 'account' do
+          routing.on String do |account_id|
+            routing.is 'delete' do
+              # GET /group/{group_id}/account/{account_id}/delete
+              routing.get do
+                GroupService.new(App.config).delete_account(@current_account, group_id, account_id)
+
+                flash[:notice] = 'Delete user successful!'
+                routing.redirect "/group/#{group_id}/setting"
+              rescue StandardError
+                flash[:error] = 'Delete user failed!'
+                routing.redirect "/group/#{group_id}/setting"
+              end
+            end
+          end
+        end
+
+        # GET /group/{group_id}/delete
+        routing.is 'delete' do
+          routing.get do
+            GroupService.new(App.config).delete(@current_account, group_id)
+
+            flash[:notice] = 'Delete group successful!'
+            routing.redirect '/group'
+          rescue StandardError
+            flash[:error] = 'Delete group failed!'
+            routing.redirect '/group'
+          end
+        end
+
+        # post /group/{group_id}/update
+        routing.is 'update' do
+          routing.post do
+            group = GroupService.new(App.config).get(@current_account, group_id)
+            group.groupname = routing.params['groupname']
+
+            GroupService.new(App.config).update(current_account: @current_account, group: group.to_h)
+
+            flash[:notice] = 'Update group name successful!'
+            routing.redirect "/group/#{group_id}/setting"
+          rescue StandardError => e
+            puts e.full_message
+            flash[:error] = 'Update group name failed!'
+            routing.redirect "/group/#{group_id}/setting"
           end
         end
       end
