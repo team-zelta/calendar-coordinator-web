@@ -10,10 +10,28 @@ module CalendarCoordinator
       @config = config
     end
 
+    # Get Group
+    def get(current_account, group_id)
+      response = HTTP.auth("Bearer #{current_account.auth_token}")
+                     .get("#{@config.API_URL}/groups/#{group_id}")
+
+      raise('Get Group failed') unless response.code == 200
+
+      JSON.parse(response.body, object_class: OpenStruct)
+    end
+
     # Get Group Owned Calendars
     def owned_calendars(group_id:)
       response = HTTP.get("#{@config.API_URL}/groups/#{group_id}/calendars")
       raise('Get Owned Calendars failed') unless response.code == 200
+
+      JSON.parse(response.body, object_class: OpenStruct)
+    end
+
+    # Get Group Owned Accounts
+    def owned_accounts(group_id:)
+      response = HTTP.get("#{@config.API_URL}/groups/#{group_id}/accounts")
+      raise('Get Owned Accounts failed') unless response.code == 200
 
       JSON.parse(response.body, object_class: OpenStruct)
     end
@@ -33,6 +51,14 @@ module CalendarCoordinator
                      .post("#{@config.API_URL}/groups", json: group)
 
       raise('Create Group failed') unless response.code == 201
+    end
+
+    # Update Group
+    def update(current_account:, group:)
+      response = HTTP.auth("Bearer #{current_account.auth_token}")
+                     .post("#{@config.API_URL}/groups/#{group[:id]}/update", json: { groupname: group[:groupname] })
+
+      raise('Update Group failed') unless response.code == 201
     end
 
     # Invite account to group
@@ -55,6 +81,22 @@ module CalendarCoordinator
                      .post("#{@config.API_URL}/groups/join", json: { group_id: group_id })
 
       raise('Join Group failed') unless response.code == 201
+    end
+
+    # Delete Group
+    def delete(current_account, group_id)
+      response = HTTP.auth("Bearer #{current_account.auth_token}")
+                     .get("#{@config.API_URL}/groups/#{group_id}/delete")
+
+      raise('Join Group failed') unless response.code == 200
+    end
+
+    # Delete account from group
+    def delete_account(current_account, group_id, account_id)
+      response = HTTP.auth("Bearer #{current_account.auth_token}")
+                     .get("#{@config.API_URL}/groups/#{group_id}/accounts/#{account_id}/delete")
+
+      raise('Delete account from group failed') unless response.code == 200
     end
   end
 end

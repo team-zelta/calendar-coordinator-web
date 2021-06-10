@@ -1,0 +1,39 @@
+h1 Settings
+
+div class = "row"
+  div class="col-sm-2"
+  h3 class="text-left" Group Name
+  form method='post' action="/group/#{@group.id}/update" id='form-rename'
+    div class="form-group"
+    div class = "row"
+      div class="col-sm-2"
+        input type='text' name='groupname' id='input-groupname' value = "#{@group.groupname}" class="form-control"
+      div class="col-sm-2"
+        button type='submit' id='button-login' class="btn btn-primary btn-block" Rename
+br
+div class = "row"
+  div class="col-sm-4"
+  h3 class="text-left" Group Member
+  div class = "row"
+    table class="table"
+      tbody 
+      - if @group_members
+          - @group_members.each do |member|
+            tr
+              td #{member.username}
+              td
+                a href="/group/#{@group.id}/account/#{member.id}/delete" delete
+  - if @group.id
+  div class="col-sm-2"
+    a class="btn btn-primary btn-block" href="/group/#{@group.id}/invite" invite 
+
+br
+div class = "row"
+  div class="col-sm-4"
+  h3 class="text-left" Group Delete
+  h6 Delete the group can not be recovered, please be certain!
+  form method='get' action="/group/#{@group.id}/delete" id='form-delete'
+    button type='submit' id='button-delete'class="btn btn-primary btn-block" Delete
+    
+
+
