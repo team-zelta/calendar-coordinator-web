@@ -98,7 +98,10 @@ module CalendarCoordinator
                                                            calendar_mode: calendar_mode,
                                                            date: date)
 
-                view 'events', locals: { calendar_events: @events_list }
+                group_service = GroupService.new(App.config)
+                @group = group_service.get(@current_account, group_id)
+
+                view 'events'
               rescue StandardError
                 view 'events'
               end
