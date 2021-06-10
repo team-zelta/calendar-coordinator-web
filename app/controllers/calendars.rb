@@ -8,6 +8,16 @@ module CalendarCoordinator
     route('calendars') do |routing|
       routing.redirect 'auth/login' unless @current_account.logged_in?
 
+      routing.is 'check' do
+        calendar_list = CalendarService.new(App.config).list_calendars(@current_account)
+        puts calendar_list.count.zero?
+        if calendar_list.count.zero?
+          view :calendar_check
+        else
+          routing.redirect '/'
+        end
+      end
+
       # GET /calendars
       routing.get do
         calendar_list = CalendarService.new(App.config).list_calendars(@current_account)
