@@ -11,7 +11,7 @@ div class = "row"
           - @group_list.each do |group|
             tr
               td
-                a href="/group/#{group.id}/calendar/list" #{group.groupname}
+                a href="/group/#{group.id}/calendar/week/events/#{DateTime.now.year}-#{DateTime.now.month}-#{DateTime.now.day}" #{group.groupname}
 
 div class = "row"
   div class="col-sm-2"
