@@ -5,7 +5,7 @@ require_relative './app'
 
 module CalendarCoordinator
   # Web controller for CalendarCoordinator API
-  class App < Roda
+  class App < Roda # rubocop:disable Metrics/ClassLength
     route('group') do |routing| # rubocop:disable Metrics/BlockLength
       routing.redirect 'auth/login' unless @current_account.logged_in?
 
@@ -150,11 +150,7 @@ module CalendarCoordinator
         routing.is 'update' do
           routing.post do
             group = GroupService.new(App.config).get(@current_account, group_id)
-            group_data = group ? group.to_json : raise('Group not found')
             group.groupname = routing.params['groupname']
-            puts group
-
-            puts group.as_json
 
             GroupService.new(App.config).update(current_account: @current_account, group: group.to_h)
 
