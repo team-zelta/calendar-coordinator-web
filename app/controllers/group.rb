@@ -75,7 +75,7 @@ module CalendarCoordinator
             end
           end
 
-          routing.on String do |calendar_mode|
+          routing.on String do |calendar_mode| # rubocop:disable Metrics/BlockLength
             routing.on 'common-busy-time' do
               # GET /group/{group_id}/calendar/{calendar_mode}/common-busy-time/{date}
               routing.get(String) do |date|
