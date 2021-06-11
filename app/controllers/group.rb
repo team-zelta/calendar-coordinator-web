@@ -100,6 +100,9 @@ module CalendarCoordinator
 
                 group_service = GroupService.new(App.config)
                 @group = group_service.get(@current_account, group_id)
+                @account_calendar = group_service.get_assign_calendar_by_account(@current_account,
+                                                                                 group_id,
+                                                                                 @current_account.id)
 
                 view 'events'
               rescue StandardError
