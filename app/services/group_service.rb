@@ -98,5 +98,15 @@ module CalendarCoordinator
 
       raise('Delete account from group failed') unless response.code == 200
     end
+
+    # Get Assign Calendar by Account
+    def get_assign_calendar_by_account(current_account, group_id, account_id)
+      response = HTTP.auth("Bearer #{current_account.auth_token}")
+                     .get("#{@config.API_URL}/groups/#{group_id}/accounts/#{account_id}/calendar")
+
+      raise('Get Assign Calendar by Account failed') unless response.code == 200
+
+      JSON.parse(response.body)
+    end
   end
 end
