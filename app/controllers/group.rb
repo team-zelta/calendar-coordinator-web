@@ -114,7 +114,6 @@ module CalendarCoordinator
           routing.get do
             @group_members = GroupService.new(App.config).owned_accounts(group_id: group_id)
             @group = GroupService.new(App.config).get(@current_account, group_id)
-
             view :group_setting, locals: { group_id: group_id }
           end
         end
