@@ -1,3 +1,23 @@
+- unless @event_list.count.zero?
+  div class = "container"
+    javascript: 
+      $(window).on('load', function() {
+          $('#calendar_check').modal('show');
+      });
+
+    div class="modal" id="calendar_check" role="document" 
+      div class="modal-dialog" 
+        div class="modal-content" 
+          div class="modal-header" 
+            h4 class="modal-title" Group Calendar
+            button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+              span aria-hidden="true"
+          div class="modal-body" 
+            p You haven't assign a calendar to this group, please choose one.
+          div class="modal-footer" 
+            a class="btn btn-primary" href="/group/#{@group.id}/calendar/list" Go
+            button type="button" class="btn btn-default" data-bs-dismiss="modal" Not Now
+
 div class = "row"
   div class="col-sm-11"
     h1 #{@group.groupname}
