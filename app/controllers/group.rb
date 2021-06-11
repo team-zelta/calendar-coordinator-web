@@ -75,7 +75,7 @@ module CalendarCoordinator
             end
           end
 
-          routing.on String do |calendar_mode|
+          routing.on String do |calendar_mode| # rubocop:disable Metrics/BlockLength
             routing.on 'common-busy-time' do
               # GET /group/{group_id}/calendar/{calendar_mode}/common-busy-time/{date}
               routing.get(String) do |date|
@@ -100,6 +100,9 @@ module CalendarCoordinator
 
                 group_service = GroupService.new(App.config)
                 @group = group_service.get(@current_account, group_id)
+                @account_calendar = group_service.get_assign_calendar_by_account(@current_account,
+                                                                                 group_id,
+                                                                                 @current_account.id)
 
                 view 'events'
               rescue StandardError
