@@ -67,6 +67,7 @@ module CalendarCoordinator
             routing.get do
               group_service = GroupService.new(App.config)
               owned_calendars = group_service.owned_calendars(group_id: group_id)
+
               @calendar_list = owned_calendars.calendars
 
               @account_calendar = group_service.get_assign_calendar_by_account(@current_account,
@@ -92,12 +93,12 @@ module CalendarCoordinator
 
               flash[:notice] = 'Add calendar success!'
 
-              routing.redirect "/group/#{group_id}/calendar/list"
+              routing.redirect "/group/#{group_id}/setting"
             rescue StandardError => e
               puts e.full_message
               flash[:errot] = 'Add calendar failed, please try again.'
 
-              routing.redirect "/group/#{group_id}/calendar/list"
+              routing.redirect "/group/#{group_id}/setting"
             end
           end
 
@@ -142,7 +143,25 @@ module CalendarCoordinator
         routing.is 'setting' do
           routing.get do
             @group_members = GroupService.new(App.config).owned_accounts(group_id: group_id)
+            @account_calendar = GroupService.new(App.config).get_assign_calendar_by_account(@current_account,
+                                                                                            group_id,
+                                                                                            @current_account.id)
+            @current_account_calendars = CalendarService.new(App.config).list_calendars(@current_account)
+
+            @members_calendars = []
+            @group_members.each do |member|
+              calendar = GroupService.new(App.config).get_assign_calendar_by_account(@current_account,
+                                                                                     group_id,
+                                                                                     member.id)
+              calendar = calendar.empty? ? '' : calendar.first
+
+              @members_calendars.push(
+                { member_id: member.id, username: member.username, calendar: calendar }
+              )
+            end
+
             @group = GroupService.new(App.config).get(@current_account, group_id)
+
             view :group_setting, locals: { group_id: group_id }
           end
         end

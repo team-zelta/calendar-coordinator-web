@@ -12,12 +12,12 @@
             div class = "row"
               form method='post' action="/group/#{group_id}/calendar/add" id='form-calendar'
                 - if @current_account_calendars
-                    - @current_account_calendars.each do |calendar| 
-                      div class="form-check"  
-                        label class="form-check-label"  
-                          input type="radio" class="form-check-input" name="calendar-radios" id="calendar-radio" value="#{calendar.id}"
-                        br
-                        a href="https://calendar.google.com/calendar/embed?src=#{calendar.gid}&ctz=#{calendar.time_zone}" #{calendar.summary} 
+                  - @current_account_calendars.each do |calendar| 
+                    div class="form-check"  
+                      label class="form-check-label"  
+                      input type="radio" class="form-check-input" name="calendar-radios" id="calendar-radio" value="#{calendar.id}"
+                      a href="https://calendar.google.com/calendar/embed?src=#{calendar.gid}&ctz=#{calendar.time_zone}" #{calendar.summary} 
+                br
                 button type='submit' id='button_calendar_add' class="btn btn-primary btn-block" Select            
 
 div class = "row"

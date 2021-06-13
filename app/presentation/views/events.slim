@@ -1,10 +1,5 @@
 - if @account_calendar.empty?
   div class = "container"
-    javascript: 
-      $(window).on('load', function() {
-          $('#calendar_check').modal('show');
-      });
-
     div class="modal" id="calendar_check" role="document" 
       div class="modal-dialog" 
         div class="modal-content" 
@@ -15,7 +10,7 @@
           div class="modal-body" 
             p You haven't assign a calendar to this group, please choose one.
           div class="modal-footer" 
-            a class="btn btn-primary" href="/group/#{@group.id}/calendar/list" Go
+            a class="btn btn-primary" href="/group/#{@group.id}/setting" Go
             button type="button" class="btn btn-default" data-bs-dismiss="modal" Not Now
 
 div class = "row"
@@ -44,3 +39,8 @@ div class = "row"
                 td=event.summary
                 td=event.start_date_time 
                 td=event.end_date_time
+
+javascript: 
+  $(window).on('load', function() {
+      $('#calendar_check').modal('show');
+  });
