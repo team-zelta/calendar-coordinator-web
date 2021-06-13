@@ -1,44 +1,91 @@
 h1 Group Settings
 
-div class = "row"
-  div class="col-sm-2"
-  h3 class="text-left" Name
-  form method='post' action="/group/#{@group.id}/update" id='form-rename'
-    div class="form-group"
-    div class = "row"
-      div class="col-sm-2"
-        input type='text' name='groupname' id='input-groupname' value = "#{@group.groupname}" class="form-control"
-      div class="col-sm-2"
-        button type='submit' id='button-login' class="btn btn-primary btn-block" Rename
-br
-div class = "row"
-  div class="col-sm-4"
-  h3 class="text-left" Member
+div class = "container"
+  div class="modal" id="calendar_check" role="document" 
+    div class="modal-dialog" 
+      div class="modal-content" 
+        div class="modal-header" 
+          h4 class="modal-title" Group Calendar
+          button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+            span aria-hidden="true"
+        div class="modal-body" 
+          p Choose a calendar to this group
+          div class = "row"
+            form method='post' action="/group/#{group_id}/calendar/add" id='form-calendar'
+              - if @current_account_calendars
+                  - @current_account_calendars.each do |calendar| 
+                    div class="form-check"  
+                      label class="form-check-label"  
+                        input type="radio" class="form-check-input" name="calendar-radios" id="calendar-radio" value="#{calendar.id}"
+                      a href="https://calendar.google.com/calendar/embed?src=#{calendar.gid}&ctz=#{calendar.time_zone}" #{calendar.summary} 
+              br
+              button type='submit' id='button_calendar_add' class="btn btn-primary btn-block" Select 
+
+div class = "container"
+  div class = "row"
+    div class="col-sm-2"
+    h3 class="text-left" Name
+    form method='post' action="/group/#{@group.id}/update" id='form-rename'
+      div class="form-group"
+      div class = "row"
+        div class="col-sm-2"
+          input type='text' name='groupname' id='input-groupname' value = "#{@group.groupname}" class="form-control"
+        div class="col-sm-2"
+          button type='submit' id='button-login' class="btn btn-primary btn-block" Rename
+  br
   div class = "row"
     div class="col-sm-4"
-      table class="table"
-        tbody 
-        - if @group_members
-            - @group_members.each do |member|
+    h3 class="text-left" Member
+    div class = "row"
+      div class="col-sm-6"
+        table class="table"
+          thead
+            th name
+            th calendar
+            th
+            th
+          tbody 
+          - unless @members_calendars.empty?
+            - @members_calendars.each do |member_calendar|
               tr
-                td #{member.username}
-                - unless member.username.include? 'owner'
-                  td
-                    a href="/group/#{@group.id}/account/#{member.id}/delete" delete
-                - else
+                td #{member_calendar[:username]}
+                - unless member_calendar[:calendar] == ''
+                    td #{member_calendar[:calendar]['summary']}
+                - else 
+                    td
+                - if @current_account.id == member_calendar[:member_id]
                   td 
-  - if @group.id
-  div class="col-sm-2"
-    a class="btn btn-primary btn-block" href="/group/#{@group.id}/invite" invite 
+                    button id='button_calendar_edit' class="btn btn-outline-primary btn-sm" edit
+                - else
+                  td
+                - unless member_calendar[:username].include? 'owner'
+                    td
+                      a class="btn btn-outline-primary btn-sm" href="/group/#{@group.id}/account/#{member_calendar[:member_id]}/delete" delete
+                - else
+                    td 
+    - if @group.id
+    div class="col-sm-2"
+      a class="btn btn-primary btn-block" href="/group/#{@group.id}/invite" invite 
 
-br
-div class = "row"
-  div class="col-sm-4"
-  h3 class="text-left" Delete
-  h6 Delete the group can not be recovered, please be certain!
-  p class="text-danger" Only owner could delete the group
-  form method='get' action="/group/#{@group.id}/delete" id='form-delete'
-    button type='submit' id='button-delete'class="btn btn-primary btn-block #{"disabled" unless @group.policies.can_delete}" Delete
-    
+  br
+  div class = "row"
+    div class="col-sm-4"
+    h3 class="text-left" Delete
+    h6 Delete the group can not be recovered, please be certain!
+    p class="text-danger" Only owner could delete the group
+    form method='get' action="/group/#{@group.id}/delete" id='form-delete'
+      button type='submit' id='button-delete'class="btn btn-primary btn-block #{"disabled" unless @group.policies.can_delete}" Delete
 
+javascript: 
+  $('#button_calendar_add').click(function(e){
+    if ($('input:radio[name="calendar-radios"]:checked').length > 0) {
+      $('#button_calendar_add').val($('input:radio[name="calendar-radios"]:checked').val());
+    } else {
+        window.alert("Must Select One!");
+        e.preventDefault();
+    }
+  });
 
+ $('#button_calendar_edit').click(function(){
+    $('#calendar_check').modal('show');
+  });

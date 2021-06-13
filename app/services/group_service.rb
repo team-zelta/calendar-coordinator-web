@@ -108,5 +108,14 @@ module CalendarCoordinator
 
       JSON.parse(response.body)
     end
+
+    # Add calendar to group
+    def add_calendar(current_account, group_id, calendar_id)
+      response = HTTP.auth("Bearer #{current_account.auth_token}")
+                     .post("#{@config.API_URL}/groups/add-calendar", json: { group_id: group_id,
+                                                                             calendar_id: calendar_id })
+
+      raise('Add Calendar failed') unless response.code == 201
+    end
   end
 end

@@ -67,11 +67,38 @@ module CalendarCoordinator
             routing.get do
               group_service = GroupService.new(App.config)
               owned_calendars = group_service.owned_calendars(group_id: group_id)
+
               @calendar_list = owned_calendars.calendars
 
-              view :calendar_list, locals: { group: owned_calendars.group }
-            rescue StandardError
+              @account_calendar = group_service.get_assign_calendar_by_account(@current_account,
+                                                                               group_id,
+                                                                               @current_account.id)
+
+              if @account_calendar.count.zero?
+                @current_account_calendars = CalendarService.new(App.config).list_calendars(@current_account)
+              end
+
+              view :calendar_list, locals: { group: owned_calendars.group, group_id: group_id }
+            rescue StandardError => e
+              puts e.full_message
               view :calendar_list
+            end
+          end
+
+          routing.is 'add' do
+            # GET /group/{group_id}/calendar/add
+            routing.post do
+              calendar_id = routing.params['calendar-radios']
+              GroupService.new(App.config).add_calendar(@current_account, group_id, calendar_id)
+
+              flash[:notice] = 'Add calendar success!'
+
+              routing.redirect "/group/#{group_id}/setting"
+            rescue StandardError => e
+              puts e.full_message
+              flash[:errot] = 'Add calendar failed, please try again.'
+
+              routing.redirect "/group/#{group_id}/setting"
             end
           end
 
@@ -116,7 +143,25 @@ module CalendarCoordinator
         routing.is 'setting' do
           routing.get do
             @group_members = GroupService.new(App.config).owned_accounts(group_id: group_id)
+            @account_calendar = GroupService.new(App.config).get_assign_calendar_by_account(@current_account,
+                                                                                            group_id,
+                                                                                            @current_account.id)
+            @current_account_calendars = CalendarService.new(App.config).list_calendars(@current_account)
+
+            @members_calendars = []
+            @group_members.each do |member|
+              calendar = GroupService.new(App.config).get_assign_calendar_by_account(@current_account,
+                                                                                     group_id,
+                                                                                     member.id)
+              calendar = calendar.empty? ? '' : calendar.first
+
+              @members_calendars.push(
+                { member_id: member.id, username: member.username, calendar: calendar }
+              )
+            end
+
             @group = GroupService.new(App.config).get(@current_account, group_id)
+
             view :group_setting, locals: { group_id: group_id }
           end
         end
@@ -128,7 +173,7 @@ module CalendarCoordinator
               routing.get do
                 GroupService.new(App.config).delete_account(@current_account, group_id, account_id)
 
-                flash[:notice] = 'Delete user successful!'
+                flash[:notice] = 'Delete user success!'
                 routing.redirect "/group/#{group_id}/setting"
               rescue StandardError
                 flash[:error] = 'Delete user failed!'
@@ -143,7 +188,7 @@ module CalendarCoordinator
           routing.get do
             GroupService.new(App.config).delete(@current_account, group_id)
 
-            flash[:notice] = 'Delete group successful!'
+            flash[:notice] = 'Delete group success!'
             routing.redirect '/group'
           rescue StandardError
             flash[:error] = 'Delete group failed!'
@@ -159,7 +204,7 @@ module CalendarCoordinator
 
             GroupService.new(App.config).update(current_account: @current_account, group: group.to_h)
 
-            flash[:notice] = 'Update group name successful!'
+            flash[:notice] = 'Update group name success!'
             routing.redirect "/group/#{group_id}/setting"
           rescue StandardError => e
             puts e.full_message
