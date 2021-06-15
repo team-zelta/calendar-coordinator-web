@@ -37,25 +37,10 @@ module CalendarCoordinator
         google_calendar.authorization = credentials
 
         # Get calendar list from Google Calendar API
-        calendar_list = google_calendar.list_calendar_lists
-
+        calendar_list = CalendarService.new(App.config).list_calendar(@current_account, credentials)
         # Save calendar to Database
         calendar_service = CalendarService.new(App.config)
-        calendar_service.save(account_id: current_account.id, calendars: calendar_list.items)
-
-        calendar_list.items.each do |calendar|
-          next unless calendar.access_role == 'owner'
-
-          events = google_calendar.list_events(calendar.id,
-                                               max_results: 50,
-                                               single_events: true,
-                                               order_by: 'startTime',
-                                               time_min: Time.now.iso8601)
-
-          EventService.new(App.config).save_from_google(current_account: @current_account,
-                                                        calendar_gid: Base64.strict_encode64(calendar.id),
-                                                        google_events: events.items)
-        end
+        calendar_service.save(account_id: current_account.id, calendars: calendar_list)
 
         view 'home', locals: { current_account: @current_account }
       end
