@@ -106,13 +106,31 @@ module CalendarCoordinator
             routing.on 'common-busy-time' do
               # GET /group/{group_id}/calendar/{calendar_mode}/common-busy-time/{date}
               routing.get(String) do |date|
-                calendar_service = CalendarService.new(App.config)
-                @common_busy_time = calendar_service.list_common_busy_time(group_id: group_id,
-                                                                           calendar_mode: calendar_mode,
-                                                                           date: date)
+                user_id = @current_account.email
 
-                view 'events_common', locals: { events: @common_busy_time }
-              rescue StandardError
+                # Google OAuth2
+                authorizer = Google::Auth::WebUserAuthorizer.new(CLIENT_ID, SCOPE, TOKEN_STORE)
+                credentials = authorizer.get_credentials(user_id, request)
+                unless credentials
+                  routing.redirect authorizer.get_authorization_url(login_hint: user_id, request: request)
+                end
+
+                calendar_service = CalendarService.new(App.config)
+                @events = calendar_service.list_common_busy_time(current_account: @current_account,
+                                                                 group_id: group_id,
+                                                                 calendar_mode: calendar_mode,
+                                                                 date: date,
+                                                                 credentials: credentials)
+
+                group_service = GroupService.new(App.config)
+                @group = group_service.get(@current_account, group_id)
+                @account_calendar = group_service.get_assign_calendar_by_account(@current_account,
+                                                                                 group_id,
+                                                                                 @current_account.id)
+
+                view 'events_common'
+              rescue StandardError => e
+                puts e.full_message
                 view 'events_common'
               end
             end
