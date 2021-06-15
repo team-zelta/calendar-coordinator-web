@@ -1,4 +1,24 @@
-h1 Common Busy Time Events 
+- if @account_calendar.empty?
+  div class = "container"
+    div class="modal" id="calendar_check" role="document" 
+      div class="modal-dialog" 
+        div class="modal-content" 
+          div class="modal-header" 
+            h4 class="modal-title" Group Calendar
+            button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+              span aria-hidden="true"
+          div class="modal-body" 
+            p You haven't assign a calendar to this group, please choose one.
+          div class="modal-footer" 
+            a class="btn btn-primary" href="/group/#{@group.id}/setting" Go
+            button type="button" class="btn btn-default" data-bs-dismiss="modal" Not Now
+
+div class = "row"
+  div class="col-sm-11"
+    h1 #{@group.groupname}
+  div class="col-sm-1"
+      a class="navbar-brand" rel="/group/#{@group.id}/setting" href="/group/#{@group.id}/setting" title="Setting"
+          img alt="Setting" src="/setting.png" style="max-width:20px; margin-top: 10px;"
 
 div class = "row"
   table class="table"
@@ -9,10 +29,15 @@ div class = "row"
         th scope="col" start_date_time
         th scope="col" end_date_time
     tbody 
-    - if events
-        - events.each do |event|
+    - if @events
+        - @events.each do |event|
           tr
             td=event.id 
             td=event.summary
             td=event.start_date_time 
             td=event.end_date_time
+
+javascript: 
+  $(window).on('load', function() {
+      $('#calendar_check').modal('show');
+  });
