@@ -36,8 +36,9 @@ module CalendarCoordinator
         google_calendar = Google::Apis::CalendarV3::CalendarService.new
         google_calendar.authorization = credentials
 
+        google_credentials = GoogleCredentials.new(credentials)
         # Get calendar list from Google Calendar API
-        calendar_list = CalendarService.new(App.config).list_calendar(@current_account, credentials)
+        calendar_list = CalendarService.new(App.config).list_calendar(@current_account, google_credentials)
         # Save calendar to Database
         calendar_service = CalendarService.new(App.config)
         calendar_service.save(account_id: current_account.id, calendars: calendar_list)

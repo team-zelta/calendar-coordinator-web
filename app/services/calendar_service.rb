@@ -14,13 +14,7 @@ module CalendarCoordinator
     # Get all calendars of the current user
     def list_calendar(current_account, credentials)
       response = HTTP.auth("Bearer #{current_account.auth_token}")
-                     .post("#{@config.API_URL}/google/calendar", json: { client_id: credentials.client_id,
-                                                                         client_secret: credentials.client_secret,
-                                                                         scope: credentials.scope,
-                                                                         access_token: credentials.access_token,
-                                                                         refresh_token: credentials.refresh_token,
-                                                                         expires_at: credentials.expires_at,
-                                                                         grant_type: credentials.grant_type })
+                     .post("#{@config.API_URL}/google/calendar", json: credentials)
 
       response.code == 200 ? JSON.parse(response, object_class: OpenStruct) : nil
     end
@@ -64,13 +58,7 @@ module CalendarCoordinator
 
       response = HTTP.auth("Bearer #{current_account.auth_token}")
                      .post("#{@config.API_URL}/groups/#{group_id}/common-busy-time/#{calendar_mode}/#{datetime}",
-                           json: { client_id: credentials.client_id,
-                                   client_secret: credentials.client_secret,
-                                   scope: credentials.scope,
-                                   access_token: credentials.access_token,
-                                   refresh_token: credentials.refresh_token,
-                                   expires_at: credentials.expires_at,
-                                   grant_type: credentials.grant_type })
+                           json: credentials)
 
       raise('Get Common Busy Time failed') unless response.code == 200
 

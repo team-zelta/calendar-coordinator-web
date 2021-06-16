@@ -115,12 +115,14 @@ module CalendarCoordinator
                   routing.redirect authorizer.get_authorization_url(login_hint: user_id, request: request)
                 end
 
+                google_credentials = GoogleCredentials.new(credentials)
+
                 calendar_service = CalendarService.new(App.config)
                 @events = calendar_service.list_common_busy_time(current_account: @current_account,
                                                                  group_id: group_id,
                                                                  calendar_mode: calendar_mode,
                                                                  date: date,
-                                                                 credentials: credentials)
+                                                                 credentials: google_credentials)
 
                 group_service = GroupService.new(App.config)
                 @group = group_service.get(@current_account, group_id)
