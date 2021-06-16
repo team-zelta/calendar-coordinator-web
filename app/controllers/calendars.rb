@@ -30,7 +30,8 @@ module CalendarCoordinator
         credentials = authorizer.get_credentials(user_id, request)
         routing.redirect authorizer.get_authorization_url(login_hint: user_id, request: request) unless credentials
 
-        calendar_list = CalendarService.new(App.config).list_calendar(@current_account, credentials)
+        google_credentials = GoogleCredentials.new(credentials)
+        calendar_list = CalendarService.new(App.config).list_calendar(@current_account, google_credentials)
 
         view :owned_calendars,
              locals: { current_user: @current_account, calendars: calendar_list }

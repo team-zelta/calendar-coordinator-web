@@ -103,9 +103,9 @@ module CalendarCoordinator
           end
 
           routing.on String do |calendar_mode| # rubocop:disable Metrics/BlockLength
-            routing.on 'common-busy-time' do
-              # GET /group/{group_id}/calendar/{calendar_mode}/common-busy-time/{date}
-              routing.get(String) do |date|
+            routing.on String do |event_type| # rubocop:disable Metrics/BlockLength
+              # GET /group/{group_id}/calendar/{calendar_mode}/{event_type}/{date}
+              routing.get(String) do |date| # rubocop:disable Metrics/BlockLength
                 user_id = @current_account.email
 
                 # Google OAuth2
@@ -115,12 +115,22 @@ module CalendarCoordinator
                   routing.redirect authorizer.get_authorization_url(login_hint: user_id, request: request)
                 end
 
+                google_credentials = GoogleCredentials.new(credentials)
+
                 calendar_service = CalendarService.new(App.config)
-                @events = calendar_service.list_common_busy_time(current_account: @current_account,
-                                                                 group_id: group_id,
-                                                                 calendar_mode: calendar_mode,
-                                                                 date: date,
-                                                                 credentials: credentials)
+                if event_type == 'common-busy-time'
+                  @events = calendar_service.list_common_busy_time(current_account: @current_account,
+                                                                   group_id: group_id,
+                                                                   calendar_mode: calendar_mode,
+                                                                   date: date,
+                                                                   credentials: google_credentials)
+                else
+                  @event_list = calendar_service.list_events(current_account: @current_account,
+                                                             group_id: group_id,
+                                                             calendar_mode: calendar_mode,
+                                                             date: date,
+                                                             credentials: google_credentials)
+                end
 
                 group_service = GroupService.new(App.config)
                 @group = group_service.get(@current_account, group_id)
@@ -128,30 +138,18 @@ module CalendarCoordinator
                                                                                  group_id,
                                                                                  @current_account.id)
 
-                view 'events_common'
+                # day or week
+                @calendar_start_date = if calendar_mode == 'day'
+                                         DateTime.parse(date)
+                                       else
+                                         DateTime.parse(date) - DateTime.parse(date).wday
+                                       end
+                @calendar_mode_date = calendar_mode == 'day' ? 1 : 7
+
+                view 'events', locals: { calendar_mode: calendar_mode, event_type: event_type }
               rescue StandardError => e
                 puts e.full_message
-                view 'events_common'
-              end
-            end
-
-            routing.on 'events' do
-              # GET /group/{group_id}/calendar/{calendar_mode}/events/{date}
-              routing.get(String) do |date|
-                calendar_service = CalendarService.new(App.config)
-                @event_list = calendar_service.list_events(group_id: group_id,
-                                                           calendar_mode: calendar_mode,
-                                                           date: date)
-
-                group_service = GroupService.new(App.config)
-                @group = group_service.get(@current_account, group_id)
-                @account_calendar = group_service.get_assign_calendar_by_account(@current_account,
-                                                                                 group_id,
-                                                                                 @current_account.id)
-
-                view 'events'
-              rescue StandardError
-                view 'events'
+                view 'events', locals: { calendar_mode: calendar_mode, event_type: event_type }
               end
             end
           end
