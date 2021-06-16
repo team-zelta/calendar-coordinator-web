@@ -146,6 +146,9 @@ module CalendarCoordinator
                                        end
                 @calendar_mode_date = calendar_mode == 'day' ? 1 : 7
 
+                @group_list = group_service.list(current_account: @current_account)
+                puts @group_list
+
                 view 'events', locals: { calendar_mode: calendar_mode, event_type: event_type }
               rescue StandardError => e
                 puts e.full_message
