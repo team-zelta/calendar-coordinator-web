@@ -103,9 +103,9 @@ module CalendarCoordinator
           end
 
           routing.on String do |calendar_mode| # rubocop:disable Metrics/BlockLength
-            routing.on String do |event_type|
+            routing.on String do |event_type| # rubocop:disable Metrics/BlockLength
               # GET /group/{group_id}/calendar/{calendar_mode}/{event_type}/{date}
-              routing.get(String) do |date|
+              routing.get(String) do |date| # rubocop:disable Metrics/BlockLength
                 user_id = @current_account.email
 
                 # Google OAuth2
@@ -149,7 +149,7 @@ module CalendarCoordinator
                 view 'events', locals: { calendar_mode: calendar_mode, event_type: event_type }
               rescue StandardError => e
                 puts e.full_message
-                view 'events'
+                view 'events', locals: { calendar_mode: calendar_mode, event_type: event_type }
               end
             end
           end
