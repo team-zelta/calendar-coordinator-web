@@ -140,10 +140,22 @@ module CalendarCoordinator
             routing.on 'events' do
               # GET /group/{group_id}/calendar/{calendar_mode}/events/{date}
               routing.get(String) do |date|
+                user_id = @current_account.email
+
+                # Google OAuth2
+                authorizer = Google::Auth::WebUserAuthorizer.new(CLIENT_ID, SCOPE, TOKEN_STORE)
+                credentials = authorizer.get_credentials(user_id, request)
+                unless credentials
+                  routing.redirect authorizer.get_authorization_url(login_hint: user_id, request: request)
+                end
+
+                google_credentials = GoogleCredentials.new(credentials)
                 calendar_service = CalendarService.new(App.config)
-                @event_list = calendar_service.list_events(group_id: group_id,
+                @event_list = calendar_service.list_events(current_account: @current_account,
+                                                           group_id: group_id,
                                                            calendar_mode: calendar_mode,
-                                                           date: date)
+                                                           date: date,
+                                                           credentials: google_credentials)
 
                 group_service = GroupService.new(App.config)
                 @group = group_service.get(@current_account, group_id)
@@ -152,7 +164,8 @@ module CalendarCoordinator
                                                                                  @current_account.id)
 
                 view 'events'
-              rescue StandardError
+              rescue StandardError => e
+                puts e.full_message
                 view 'events'
               end
             end

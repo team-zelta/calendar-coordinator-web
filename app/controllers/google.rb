@@ -43,7 +43,7 @@ module CalendarCoordinator
         calendar_service = CalendarService.new(App.config)
         calendar_service.save(account_id: current_account.id, calendars: calendar_list)
 
-        view 'home', locals: { current_account: @current_account }
+        routing.redirect '/'
       end
     end
 

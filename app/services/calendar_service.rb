@@ -53,7 +53,7 @@ module CalendarCoordinator
     end
 
     # Get Common Busy Time
-    def list_common_busy_time(current_account:, group_id:, calendar_mode:, date:, credentials:) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+    def list_common_busy_time(current_account:, group_id:, calendar_mode:, date:, credentials:)
       datetime = "#{DateTime.parse(date).year}-#{DateTime.parse(date).month}-#{DateTime.parse(date).day}"
 
       response = HTTP.auth("Bearer #{current_account.auth_token}")
@@ -66,10 +66,12 @@ module CalendarCoordinator
     end
 
     # Get all events
-    def list_events(group_id:, calendar_mode:, date:)
+    def list_events(current_account:, group_id:, calendar_mode:, date:, credentials:)
       datetime = "#{DateTime.parse(date).year}-#{DateTime.parse(date).month}-#{DateTime.parse(date).day}"
 
-      response = HTTP.get("#{@config.API_URL}/groups/#{group_id}/events/#{calendar_mode}/#{datetime}")
+      response = HTTP.auth("Bearer #{current_account.auth_token}")
+                     .post("#{@config.API_URL}/groups/#{group_id}/events/#{calendar_mode}/#{datetime}",
+                           json: credentials)
       raise('Get All Events failed') unless response.code == 200
 
       JSON.parse(response.body, object_class: OpenStruct)
