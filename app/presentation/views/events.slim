@@ -1,3 +1,5 @@
+link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous"
+
 - if @account_calendar.empty?
   div class = "container"
     div class="modal" id="calendar_check" role="document" 
@@ -20,25 +22,52 @@ div class = "row"
       a class="navbar-brand" rel="/group/#{@group.id}/setting" href="/group/#{@group.id}/setting" title="Setting"
           img alt="Setting" src="/setting.png" style="max-width:20px; margin-top: 10px;"
 
-div class = "row"
-  table class="table"
-    thead 
-      tr 
-        th scope="col" username
-        th scope="col" id 
-        th scope="col" summary
-        th scope="col" start_date_time
-        th scope="col" end_date_time
-    tbody 
-    - if @event_list
-        - @event_list.each do |calendar|
-            - calendar.events.each do |event|
-              tr
-                td=calendar.username 
-                td=event.id 
-                td=event.summary
-                td=event.start_date_time 
-                td=event.end_date_time
+div class="row text-center"
+  div class="col-sm-1"
+    a class="btn" href="/group/#{@group.id}/calendar/#{calendar_mode}/#{event_type}/#{@calendar_start_date.year}-#{@calendar_start_date.month}-#{@calendar_start_date.day - @calendar_mode_date}"
+      i class="fa fa-chevron-left" style="color:black"
+  div class="col-sm-10"
+  div class="col-sm-1"
+    a class="btn" href="/group/#{@group.id}/calendar/#{calendar_mode}/#{event_type}/#{@calendar_start_date.year}-#{@calendar_start_date.month}-#{@calendar_start_date.day + @calendar_mode_date}"
+      i class="fa fa-chevron-right" style="color:black"
+
+- if event_type == 'events'
+  div class = "row"
+    table class="table"
+      thead 
+        tr 
+          th scope="col" username
+          th scope="col" id 
+          th scope="col" summary
+          th scope="col" start_date_time
+          th scope="col" end_date_time
+      tbody 
+      - if @event_list
+          - @event_list.each do |calendar|
+              - calendar.events.each do |event|
+                tr
+                  td=calendar.username 
+                  td=event.id 
+                  td=event.summary
+                  td=event.start_date_time 
+                  td=event.end_date_time
+- else
+  div class = "row"
+    table class="table"
+      thead 
+        tr 
+          th scope="col" id 
+          th scope="col" summary
+          th scope="col" start_date_time
+          th scope="col" end_date_time
+      tbody 
+      - if @events
+          - @events.each do |event|
+            tr
+              td=event.id 
+              td=event.summary
+              td=event.start_date_time 
+              td=event.end_date_time
 
 javascript: 
   $(window).on('load', function() {
