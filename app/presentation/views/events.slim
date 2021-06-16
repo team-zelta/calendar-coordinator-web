@@ -38,7 +38,7 @@ div class = "row"
   - if @calendar_start_date && @calendar_mode_date
     div class="col-sm-2" style="margin-top: 10px;"
       div class="btn-group" role="group" aria-label="Basic outlined example"
-        a class="btn btn-outline-primary #{"disabled" if calendar_mode == 'week'}" href="/group/#{@group.id}/calendar/week/common_busy_time/#{@calendar_start_date.year}-#{@calendar_start_date.month}-#{@calendar_start_date.day}" Week
+        a class="btn btn-outline-primary #{"disabled" if calendar_mode == 'week'}" href="/group/#{@group.id}/calendar/week/common-busy-time/#{@calendar_start_date.year}-#{@calendar_start_date.month}-#{@calendar_start_date.day}" Week
         a class="btn btn-outline-primary #{"disabled" if calendar_mode == 'day'}" href="/group/#{@group.id}/calendar/day/events/#{@calendar_start_date.year}-#{@calendar_start_date.month}-#{@calendar_start_date.day}" Day
 
   div class="col-sm-1" style="margin-top: 10px;"
