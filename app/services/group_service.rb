@@ -51,6 +51,8 @@ module CalendarCoordinator
                      .post("#{@config.API_URL}/groups", json: group)
 
       raise('Create Group failed') unless response.code == 201
+
+      JSON.parse(response.body, object_class: OpenStruct)
     end
 
     # Update Group
