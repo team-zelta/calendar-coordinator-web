@@ -247,10 +247,11 @@ module CalendarCoordinator
         group_data = routing.params
 
         group_service = GroupService.new(App.config)
-        group_service.create(current_account: @current_account, group: group_data)
+        group = group_service.create(current_account: @current_account, group: group_data)
 
         flash[:notice] = 'Group created!'
-        routing.redirect '/group'
+        routing_url = "/group/#{group.group_id}/calendar/week/common-busy-time"
+        routing.redirect "#{routing_url}/#{DateTime.now.year}-#{DateTime.now.month}-#{DateTime.now.day}"
       rescue StandardError => e
         puts e.full_message
         flash[:error] = 'Create Group failed, please try again'
