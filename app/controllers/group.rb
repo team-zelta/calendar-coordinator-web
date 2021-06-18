@@ -108,16 +108,17 @@ module CalendarCoordinator
             routing.on String do |event_type| # rubocop:disable Metrics/BlockLength
               # GET /group/{group_id}/calendar/{calendar_mode}/{event_type}/{date}
               routing.get(String) do |date| # rubocop:disable Metrics/BlockLength
-                user_id = @current_account.email
+                group_service = GroupService.new(App.config)
+                emails = group_service.owned_calendars_account_emails(group_id: group_id)
 
                 # Google OAuth2
                 authorizer = Google::Auth::WebUserAuthorizer.new(CLIENT_ID, SCOPE, TOKEN_STORE)
-                credentials = authorizer.get_credentials(user_id, request)
-                unless credentials
-                  routing.redirect authorizer.get_authorization_url(login_hint: user_id, request: request)
-                end
 
-                google_credentials = GoogleCredentials.new(credentials)
+                credentials_list = []
+                emails.each do |email|
+                  credentials = authorizer.get_credentials(email, request)
+                  credentials_list.push(GoogleCredentials.new(credentials))
+                end
 
                 calendar_service = CalendarService.new(App.config)
                 if event_type == 'common-busy-time'
@@ -125,16 +126,15 @@ module CalendarCoordinator
                                                                    group_id: group_id,
                                                                    calendar_mode: calendar_mode,
                                                                    date: date,
-                                                                   credentials: google_credentials)
+                                                                   credentials: credentials_list)
                 else
                   @event_list = calendar_service.list_events(current_account: @current_account,
                                                              group_id: group_id,
                                                              calendar_mode: calendar_mode,
                                                              date: date,
-                                                             credentials: google_credentials)
+                                                             credentials: credentials_list)
                 end
 
-                group_service = GroupService.new(App.config)
                 @group = group_service.get(@current_account, group_id)
                 @account_calendar = group_service.get_assign_calendar_by_account(@current_account,
                                                                                  group_id,
