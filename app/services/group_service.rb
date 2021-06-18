@@ -28,6 +28,14 @@ module CalendarCoordinator
       JSON.parse(response.body, object_class: OpenStruct)
     end
 
+    # Get Group Owned Calendars Account email
+    def owned_calendars_account_emails(group_id:)
+      response = HTTP.get("#{@config.API_URL}/groups/#{group_id}/calendar-account-email")
+      raise('Get Owned Calendars failed') unless response.code == 200
+
+      JSON.parse(response.body)
+    end
+
     # Get Group Owned Accounts
     def owned_accounts(group_id:)
       response = HTTP.get("#{@config.API_URL}/groups/#{group_id}/accounts")
