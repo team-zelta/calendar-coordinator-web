@@ -72,9 +72,9 @@ module CalendarCoordinator
 
       response = HTTP.auth("Bearer #{current_account.auth_token}")
                      .post("#{@config.API_URL}/groups/invite", json: invitation_data)
-      raise(InvitationError) unless response.code == 202
 
-      JSON.parse(response.body)
+      response_body = JSON.parse(response.body)
+      raise(InvitationError, response_body['message']) unless response.code == 202
     end
 
     # Join Group
