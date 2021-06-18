@@ -9,6 +9,8 @@ module CalendarCoordinator
     route('group') do |routing| # rubocop:disable Metrics/BlockLength
       routing.redirect 'auth/login' unless @current_account.logged_in?
 
+      @register_route = '/account/register'
+
       # GET /group/create
       routing.is 'create' do
         routing.get do
@@ -56,8 +58,8 @@ module CalendarCoordinator
           rescue StandardError => e
             puts "Send Invitation email failed: #{e.inspect}"
             puts e.full_message
-            flash[:error] = 'Invitation failed, please try again.'
-            routing.redirect @register_route
+            flash[:error] = "Invitation failed, #{e.message}, please try again."
+            routing.redirect "/group/#{group_id}/invite"
           end
         end
 
