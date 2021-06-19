@@ -15,10 +15,17 @@ module CalendarCoordinator
       use Rack::SslEnforcer, hsts: true
     end
 
-    FONT_SRC = %w[https://cdn.jsdelivr.net].freeze
-    SCRIPT_SRC = %w[https://cdn.jsdelivr.net].freeze
+    FONT_SRC = %w[https://cdn.jsdelivr.net
+                  https://maxcdn.bootstrapcdn.com
+                  https://cdnjs.cloudflare.com].freeze
+    SCRIPT_SRC = %w[https://cdn.jsdelivr.net
+                    https://ajax.googleapis.com
+                    #{ENV['APP_URL']}].freeze
     STYLE_SRC = %w[https://bootswatch.com
-                   https://cdn.jsdelivr.net].freeze
+                   https://cdn.jsdelivr.net
+                   https://maxcdn.bootstrapcdn.com
+                   https://cdnjs.cloudflare.com].freeze
+    puts SCRIPT_SRC
 
     use SecureHeaders::Middleware
 
