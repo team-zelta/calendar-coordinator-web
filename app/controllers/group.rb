@@ -54,7 +54,7 @@ module CalendarCoordinator
             GroupService.new(App.config).invite(@current_account, group_id, invitation.to_h)
 
             flash[:notice] = 'Invitation email has sent.'
-            routing.redirect '/group'
+            routing.redirect "/group/#{group_id}/setting"
           rescue StandardError => e
             puts "Send Invitation email failed: #{e.inspect}"
             puts e.full_message
@@ -150,6 +150,8 @@ module CalendarCoordinator
 
                 @group_list = group_service.list(current_account: @current_account)
 
+                CurrentSession.new(session).store_location = request
+
                 view 'events', locals: { calendar_mode: calendar_mode, event_type: event_type }
               rescue StandardError => e
                 puts e.full_message
@@ -182,7 +184,9 @@ module CalendarCoordinator
 
             @group = GroupService.new(App.config).get(@current_account, group_id)
 
-            view :group_setting, locals: { group_id: group_id }
+            previous_path = CurrentSession.new(session).location
+
+            view :group_setting, locals: { group_id: group_id, previous_path: previous_path }
           end
         end
 
