@@ -55,7 +55,9 @@ module CalendarCoordinator
         previous_path = CurrentSession.new(session).location
 
         if @current_account.username == username
-          view :account, locals: { account_detail: account_detail, calendars: calendar_list, previous_path: previous_path}
+          view :account, locals: { account_detail: account_detail,
+                                   calendars: calendar_list,
+                                   previous_path: previous_path }
         else
           routing.redirect @login_route
         end
