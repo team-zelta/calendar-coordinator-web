@@ -23,5 +23,15 @@ module CalendarCoordinator
       @secure_session.delete(:account)
       @secure_session.delete(:auth_token)
     end
+
+    # Page path for redirect
+    def store_location=(request)
+      @secure_session.set(:return_to, request.fullpath)
+    end
+
+    # Page path for redirect
+    def location
+      @secure_session.get(:return_to)
+    end
   end
 end

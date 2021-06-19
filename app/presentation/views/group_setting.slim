@@ -1,4 +1,11 @@
-h1 Group Settings
+link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous"
+
+div class = "row"
+    div class="col-sm-1" style="margin-top: 10px;"
+      a class="btn" href="#{previous_path}"
+        i class="fa fa-arrow-left fa-lg" style="color:black"
+    div class="col-sm-6"
+      h1 Group Settings
 
 div class = "container"
   div class="modal" id="calendar_check" role="document" 
@@ -23,21 +30,24 @@ div class = "container"
 
 div class = "container"
   div class = "row"
-    div class="col-sm-2"
-    h3 class="text-left" Name
-    form method='post' action="/group/#{@group.id}/update" id='form-rename'
-      div class="form-group"
-      div class = "row"
-        div class="col-sm-2"
-          input type='text' name='groupname' id='input-groupname' value = "#{@group.groupname}" class="form-control"
-        div class="col-sm-2"
-          button type='submit' id='button-login' class="btn btn-primary btn-block" Rename
+    div class="col-sm-1"
+    div class="col-sm-11"
+      h3 class="text-left" Name
+      form method='post' action="/group/#{@group.id}/update" id='form-rename'
+        div class="form-group"
+        div class = "row"
+          div class="col-sm-2"
+            input type='text' name='groupname' id='input-groupname' value = "#{@group.groupname}" class="form-control"
+          div class="col-sm-2"
+            button type='submit' id='button-login' class="btn btn-primary btn-block" Rename
   br
   div class = "row"
+    div class="col-sm-1"
     div class="col-sm-4"
-    h3 class="text-left" Member
+      h3 class="text-left" Member
     div class = "row"
-      div class="col-sm-6"
+      div class="col-sm-1"
+      div class="col-sm-8"
         table class="table"
           thead
             th name
@@ -64,16 +74,18 @@ div class = "container"
                 - else
                     td 
     - if @group.id
-    div class="col-sm-2"
-      a class="btn btn-primary btn-block" href="/group/#{@group.id}/invite" invite 
+      div class="col-sm-1"
+      div class="col-sm-2"
+        a class="btn btn-primary btn-block" href="/group/#{@group.id}/invite" invite 
 
   br
   div class = "row"
+    div class="col-sm-1"
     div class="col-sm-4"
-    h3 class="text-left" Delete
-    h6 Delete the group can not be recovered, please be certain!
-    p class="text-danger" Only owner could delete the group
-    form method='get' action="/group/#{@group.id}/delete" id='form-delete'
-      button type='submit' id='button-delete'class="btn btn-primary btn-block #{"disabled" unless @group.policies.can_delete}" Delete
-
+      h3 class="text-left" Delete
+      h6 Delete the group can not be recovered, please be certain!
+      p class="text-danger" Only owner could delete the group
+      form method='get' action="/group/#{@group.id}/delete" id='form-delete'
+        button type='submit' id='button-delete'class="btn btn-primary btn-block #{"disabled" unless @group.policies.can_delete}" Delete
+br
 script src="#{ENV['APP_URL']}/js/group_setting.js"
