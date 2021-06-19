@@ -195,7 +195,8 @@ module CalendarCoordinator
 
                 flash[:notice] = 'Delete user success!'
                 routing.redirect "/group/#{group_id}/setting"
-              rescue StandardError
+              rescue StandardError => e
+                puts e.full_message
                 flash[:error] = 'Delete user failed!'
                 routing.redirect "/group/#{group_id}/setting"
               end
