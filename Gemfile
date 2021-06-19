@@ -21,6 +21,7 @@ gem 'http'
 # Security
 gem 'bundler-audit'
 gem 'rbnacl' # assumes libsodium package already installed
+gem 'secure_headers'
 
 # Validation
 gem 'dry-validation'

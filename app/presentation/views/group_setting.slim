@@ -76,16 +76,4 @@ div class = "container"
     form method='get' action="/group/#{@group.id}/delete" id='form-delete'
       button type='submit' id='button-delete'class="btn btn-primary btn-block #{"disabled" unless @group.policies.can_delete}" Delete
 
-javascript: 
-  $('#button_calendar_add').click(function(e){
-    if ($('input:radio[name="calendar-radios"]:checked').length > 0) {
-      $('#button_calendar_add').val($('input:radio[name="calendar-radios"]:checked').val());
-    } else {
-        window.alert("Must Select One!");
-        e.preventDefault();
-    }
-  });
-
- $('#button_calendar_edit').click(function(){
-    $('#calendar_check').modal('show');
-  });
+script src="#{ENV['APP_URL']}/js/group_setting.js"

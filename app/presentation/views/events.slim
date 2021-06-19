@@ -87,10 +87,7 @@ link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/c
               td=event.start_date_time 
               td=event.end_date_time
 
-javascript: 
-  $(window).on('load', function() {
-      $('#calendar_check').modal('show');
-  });
+script src="#{ENV['APP_URL']}/js/events.js"
 
 css: 
   ul {
