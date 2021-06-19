@@ -17,13 +17,12 @@ class GetAccountDetails
 
   def call(current_account)
     response = HTTP.auth("Bearer #{current_account.auth_token}")
-                   .get("#{@config.API_URL}/accounts/#{current_account.id}}")
+                   .get("#{@config.API_URL}/accounts/#{current_account.id}")
     raise InvalidAccount if response.code != 200
 
     auth = JSON.parse(response)
     account_details = auth['account']
     auth_token = auth['auth_token']
-    puts "==DEBUG== auth_token #{auth_token.inspect}"
     CalendarCoordinator::Account.new(account_details, auth_token)
   end
 end

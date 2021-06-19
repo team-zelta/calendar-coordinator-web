@@ -32,7 +32,6 @@ module CalendarCoordinator
             username: credentials.to_h[:username],
             password: credentials.to_h[:password]
           )
-
           current_account = Account.new(
             account_info[:account],
             account_info[:auth_token]

@@ -28,12 +28,12 @@ br
 .row
   span
     = "(read-only key valid for one month)"
-/ .row
-/   .col-sm-2 API Key:
-/   .col-sm-10
-/     dd class="blockquote"
-/       a data-bs-toggle="collapse" href="#api_key" aria-expanded="false" aria-controls="api_key" show key
-/       div id="api_key" class="collapse"
-/         dov class="card card-body"
-/           pre class="text-wrap" #{account.auth_token}
+.row
+  .col-sm-2 API Key:
+  .col-sm-10
+    dd class="blockquote"
+      a data-bs-toggle="collapse" href="#api_key" aria-expanded="false" aria-controls="api_key" show key
+      div id="api_key" class="collapse"
+        dov class="card card-body"
+          pre class="text-wrap" #{account_detail.auth_token}
 
