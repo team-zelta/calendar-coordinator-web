@@ -2,7 +2,7 @@
 
 module CalendarCoordinator
   # Behaviors of the currently logged in account
-  class CurrentAccount
+  class Account
     def initialize(account_info, auth_token)
       @account_info = account_info
       @auth_token = auth_token

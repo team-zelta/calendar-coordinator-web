@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative './current_account'
+require_relative './account'
 
 module CalendarCoordinator
   # Managing session information
@@ -10,8 +10,8 @@ module CalendarCoordinator
     end
 
     def current_account
-      CurrentAccount.new(@secure_session.get(:account),
-                         @secure_session.get(:auth_token))
+      Account.new(@secure_session.get(:account),
+                  @secure_session.get(:auth_token))
     end
 
     def current_account=(current_account)

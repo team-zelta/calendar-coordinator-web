@@ -39,10 +39,10 @@ module CalendarCoordinator
 
       routing.redirect @login_route unless @current_account.logged_in?
 
-      # GET /account/{username}}
+      # GET /account/{username}
       routing.get String do |username|
-        current_account = CurrentSession.new(session).current_account
-        user_id = current_account.email
+        account_detail = GetAccountDetails.new(App.config).call(@current_account)
+        user_id = @current_account.email
 
         # Google OAuth2
         authorizer = Google::Auth::WebUserAuthorizer.new(CLIENT_ID, SCOPE, TOKEN_STORE)
@@ -53,7 +53,7 @@ module CalendarCoordinator
         calendar_list = CalendarService.new(App.config).list_calendar(@current_account, google_credentials)
 
         if @current_account.username == username
-          view :account, locals: { current_account: @current_account, calendars: calendar_list }
+          view :account, locals: { account_detail: account_detail, calendars: calendar_list }
         else
           routing.redirect @login_route
         end
