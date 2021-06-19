@@ -1,49 +1,53 @@
 link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous"
 
-- if @account_calendar.empty?
-  div class = "container"
-    div class="modal" id="calendar_check" role="document" 
-      div class="modal-dialog" 
-        div class="modal-content" 
-          div class="modal-header" 
-            h4 class="modal-title" Group Calendar
-            button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
-              span aria-hidden="true"
-          div class="modal-body" 
-            p You haven't assign a calendar to this group, please choose one.
-          div class="modal-footer" 
-            a class="btn btn-primary" href="/group/#{@group.id}/setting" Go
-            button type="button" class="btn btn-default" data-bs-dismiss="modal" Not Now
+- if @account_calendar
+  - if @account_calendar.empty?
+    div class = "container"
+      div class="modal" id="calendar_check" role="document" 
+        div class="modal-dialog" 
+          div class="modal-content" 
+            div class="modal-header" 
+              h4 class="modal-title" Group Calendar
+              button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                span aria-hidden="true"
+            div class="modal-body" 
+              p You haven't assign a calendar to this group, please choose one.
+            div class="modal-footer"
+              - if @group
+                a class="btn btn-primary" href="/group/#{@group.id}/setting" Go
+                button type="button" class="btn btn-default" data-bs-dismiss="modal" Not Now
 
-div class = "row"
-  div class="col-sm-2" style="margin-top: 10px;"
-    ul
-      li class="dropdown"
-        a class="btn-lg dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" 
-          = "#{@group.groupname}"
-        
-        div class=-"dropdown-menu"
-          - if @group_list
-            - @group_list.each do |group|
-                a class="dropdown-item" href="/group/#{group.id}/calendar/week/common-busy-time/#{DateTime.now.year}-#{DateTime.now.month}-#{DateTime.now.day}" #{group.groupname}
-          a class="dropdown-item" href="/group/create" + Create
-  
-  div class="col-sm-2" style="margin-top: 10px;"
-      a class="btn" href="/group/#{@group.id}/calendar/#{calendar_mode}/#{event_type}/#{@calendar_start_date.year}-#{@calendar_start_date.month}-#{@calendar_start_date.day - @calendar_mode_date}"
-        i class="fa fa-chevron-left" style="color:black"
-      a class="btn" href="/group/#{@group.id}/calendar/#{calendar_mode}/#{event_type}/#{@calendar_start_date.year}-#{@calendar_start_date.month}-#{@calendar_start_date.day + @calendar_mode_date}"
-        i class="fa fa-chevron-right" style="color:black"
-  div class="col-sm-5"
-
-  - if @calendar_start_date && @calendar_mode_date
+- if @group
+  div class = "row"
     div class="col-sm-2" style="margin-top: 10px;"
-      div class="btn-group" role="group" aria-label="Basic outlined example"
-        a class="btn btn-outline-primary #{"disabled" if calendar_mode == 'week'}" href="/group/#{@group.id}/calendar/week/common-busy-time/#{@calendar_start_date.year}-#{@calendar_start_date.month}-#{@calendar_start_date.day}" Week
-        a class="btn btn-outline-primary #{"disabled" if calendar_mode == 'day'}" href="/group/#{@group.id}/calendar/day/events/#{@calendar_start_date.year}-#{@calendar_start_date.month}-#{@calendar_start_date.day}" Day
+      ul
+        li class="dropdown"
+          a class="btn-lg dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" 
+            = "#{@group.groupname}"
+          
+          div class=-"dropdown-menu"
+            - if @group_list
+              - @group_list.each do |group|
+                  a class="dropdown-item" href="/group/#{group.id}/calendar/week/common-busy-time/#{DateTime.now.year}-#{DateTime.now.month}-#{DateTime.now.day}" #{group.groupname}
+            a class="dropdown-item" href="/group/create" + Create
+    - if @calendar_start_date && @calendar_mode_date
+      div class="col-sm-2" style="margin-top: 10px;"
+          a class="btn" href="/group/#{@group.id}/calendar/#{calendar_mode}/#{event_type}/#{(@calendar_start_date - @calendar_mode_date).year}-#{(@calendar_start_date - @calendar_mode_date).month}-#{(@calendar_start_date - @calendar_mode_date).day}"
+            i class="fa fa-chevron-left" style="color:black"
+          a class="btn" href="/group/#{@group.id}/calendar/#{calendar_mode}/#{event_type}/#{(@calendar_start_date + @calendar_mode_date).year}-#{(@calendar_start_date + @calendar_mode_date).month}-#{(@calendar_start_date + @calendar_mode_date).day}"
+            i class="fa fa-chevron-right" style="color:black"
 
-  div class="col-sm-1" style="margin-top: 10px;"
-      a class="navbar-brand" rel="/group/#{@group.id}/setting" href="/group/#{@group.id}/setting" title="Setting"
-        i class="fa fa-cog fa-lg" style="color:black"
+    div class="col-sm-5"
+
+    - if @calendar_start_date && @calendar_mode_date
+      div class="col-sm-2" style="margin-top: 10px;"
+        div class="btn-group" role="group" aria-label="Basic outlined example"
+          a class="btn btn-outline-primary #{"disabled" if calendar_mode == 'week'}" href="/group/#{@group.id}/calendar/week/common-busy-time/#{@calendar_start_date.year}-#{@calendar_start_date.month}-#{@calendar_start_date.day}" Week
+          a class="btn btn-outline-primary #{"disabled" if calendar_mode == 'day'}" href="/group/#{@group.id}/calendar/day/events/#{@calendar_start_date.year}-#{@calendar_start_date.month}-#{@calendar_start_date.day}" Day
+
+    div class="col-sm-1" style="margin-top: 10px;"
+        a class="navbar-brand" rel="/group/#{@group.id}/setting" href="/group/#{@group.id}/setting" title="Setting"
+          i class="fa fa-cog fa-lg" style="color:black"
 
 - if event_type == 'events'
   div class = "row"

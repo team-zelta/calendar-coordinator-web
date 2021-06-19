@@ -23,12 +23,17 @@ module CalendarCoordinator
 
       # GET /
       routing.root do
-        routing.redirect 'auth/login' unless @current_account.logged_in?
+        if @current_account.logged_in?
+          group_list = GroupService.new(App.config).list(current_account: @current_account)
 
-        group_list = GroupService.new(App.config).list(current_account: @current_account)
+          routing_url = "/group/#{group_list.first.id}/calendar/week/common-busy-time"
+          routing.redirect "#{routing_url}/#{DateTime.now.year}-#{DateTime.now.month}-#{DateTime.now.day}"
+        end
 
-        routing_url = "/group/#{group_list.first.id}/calendar/week/common-busy-time"
-        routing.redirect "#{routing_url}/#{DateTime.now.year}-#{DateTime.now.month}-#{DateTime.now.day}"
+        view 'home', locals: { current_account: @current_account }
+      rescue StandardError => e
+        puts e.full_message
+        view 'home', locals: { current_account: @current_account }
       end
     end
   end

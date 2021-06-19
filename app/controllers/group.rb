@@ -9,6 +9,8 @@ module CalendarCoordinator
     route('group') do |routing| # rubocop:disable Metrics/BlockLength
       routing.redirect 'auth/login' unless @current_account.logged_in?
 
+      @register_route = '/account/register'
+
       # GET /group/create
       routing.is 'create' do
         routing.get do
@@ -56,8 +58,8 @@ module CalendarCoordinator
           rescue StandardError => e
             puts "Send Invitation email failed: #{e.inspect}"
             puts e.full_message
-            flash[:error] = 'Invitation failed, please try again.'
-            routing.redirect @register_route
+            flash[:error] = "Invitation failed, #{e.message}, please try again."
+            routing.redirect "/group/#{group_id}/invite"
           end
         end
 
@@ -106,16 +108,17 @@ module CalendarCoordinator
             routing.on String do |event_type| # rubocop:disable Metrics/BlockLength
               # GET /group/{group_id}/calendar/{calendar_mode}/{event_type}/{date}
               routing.get(String) do |date| # rubocop:disable Metrics/BlockLength
-                user_id = @current_account.email
+                group_service = GroupService.new(App.config)
+                emails = group_service.owned_calendars_account_emails(group_id: group_id)
 
                 # Google OAuth2
                 authorizer = Google::Auth::WebUserAuthorizer.new(CLIENT_ID, SCOPE, TOKEN_STORE)
-                credentials = authorizer.get_credentials(user_id, request)
-                unless credentials
-                  routing.redirect authorizer.get_authorization_url(login_hint: user_id, request: request)
-                end
 
-                google_credentials = GoogleCredentials.new(credentials)
+                credentials_list = []
+                emails.each do |email|
+                  credentials = authorizer.get_credentials(email, request)
+                  credentials_list.push(GoogleCredentials.new(credentials))
+                end
 
                 calendar_service = CalendarService.new(App.config)
                 if event_type == 'common-busy-time'
@@ -123,16 +126,15 @@ module CalendarCoordinator
                                                                    group_id: group_id,
                                                                    calendar_mode: calendar_mode,
                                                                    date: date,
-                                                                   credentials: google_credentials)
+                                                                   credentials: credentials_list)
                 else
                   @event_list = calendar_service.list_events(current_account: @current_account,
                                                              group_id: group_id,
                                                              calendar_mode: calendar_mode,
                                                              date: date,
-                                                             credentials: google_credentials)
+                                                             credentials: credentials_list)
                 end
 
-                group_service = GroupService.new(App.config)
                 @group = group_service.get(@current_account, group_id)
                 @account_calendar = group_service.get_assign_calendar_by_account(@current_account,
                                                                                  group_id,
@@ -193,7 +195,8 @@ module CalendarCoordinator
 
                 flash[:notice] = 'Delete user success!'
                 routing.redirect "/group/#{group_id}/setting"
-              rescue StandardError
+              rescue StandardError => e
+                puts e.full_message
                 flash[:error] = 'Delete user failed!'
                 routing.redirect "/group/#{group_id}/setting"
               end
@@ -247,10 +250,11 @@ module CalendarCoordinator
         group_data = routing.params
 
         group_service = GroupService.new(App.config)
-        group_service.create(current_account: @current_account, group: group_data)
+        group = group_service.create(current_account: @current_account, group: group_data)
 
         flash[:notice] = 'Group created!'
-        routing.redirect '/group'
+        routing_url = "/group/#{group.group_id}/calendar/week/common-busy-time"
+        routing.redirect "#{routing_url}/#{DateTime.now.year}-#{DateTime.now.month}-#{DateTime.now.day}"
       rescue StandardError => e
         puts e.full_message
         flash[:error] = 'Create Group failed, please try again'

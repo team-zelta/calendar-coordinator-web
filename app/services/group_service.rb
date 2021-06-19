@@ -28,6 +28,14 @@ module CalendarCoordinator
       JSON.parse(response.body, object_class: OpenStruct)
     end
 
+    # Get Group Owned Calendars Account email
+    def owned_calendars_account_emails(group_id:)
+      response = HTTP.get("#{@config.API_URL}/groups/#{group_id}/calendar-account-email")
+      raise('Get Owned Calendars failed') unless response.code == 200
+
+      JSON.parse(response.body)
+    end
+
     # Get Group Owned Accounts
     def owned_accounts(group_id:)
       response = HTTP.get("#{@config.API_URL}/groups/#{group_id}/accounts")
@@ -51,6 +59,8 @@ module CalendarCoordinator
                      .post("#{@config.API_URL}/groups", json: group)
 
       raise('Create Group failed') unless response.code == 201
+
+      JSON.parse(response.body, object_class: OpenStruct)
     end
 
     # Update Group
@@ -70,9 +80,9 @@ module CalendarCoordinator
 
       response = HTTP.auth("Bearer #{current_account.auth_token}")
                      .post("#{@config.API_URL}/groups/invite", json: invitation_data)
-      raise(InvitationError) unless response.code == 202
 
-      JSON.parse(response.body)
+      response_body = JSON.parse(response.body)
+      raise(InvitationError, response_body['message']) unless response.code == 202
     end
 
     # Join Group
