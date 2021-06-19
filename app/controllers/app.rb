@@ -31,6 +31,9 @@ module CalendarCoordinator
         end
 
         view 'home', locals: { current_account: @current_account }
+      rescue StandardError => e
+        puts e.full_message
+        view 'home', locals: { current_account: @current_account }
       end
     end
   end

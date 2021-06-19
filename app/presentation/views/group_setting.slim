@@ -60,7 +60,7 @@ div class = "container"
                   td
                 - unless member_calendar[:username].include? 'owner'
                     td
-                      a class="btn btn-outline-primary btn-sm" href="/group/#{@group.id}/account/#{member_calendar[:member_id]}/delete" delete
+                      a class="btn btn-outline-primary btn-sm #{"disabled" unless @group.policies.can_delete}" href="/group/#{@group.id}/account/#{member_calendar[:member_id]}/delete" delete
                 - else
                     td 
     - if @group.id
