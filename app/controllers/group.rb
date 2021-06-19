@@ -28,7 +28,8 @@ module CalendarCoordinator
           group_service.join(@current_account, invitation['group_id'])
 
           flash[:notice] = 'Join Group Success!'
-          routing.redirect '/group'
+          routing_url = "/group/#{invitation['group_id']}/calendar/week/common-busy-time"
+          routing.redirect "#{routing_url}/#{DateTime.now.year}-#{DateTime.now.month}-#{DateTime.now.day}"
         rescue StandardError => e
           puts e.full_message
           flash[:error] = 'Join Group failed, please contact to the group owner to try again.'
