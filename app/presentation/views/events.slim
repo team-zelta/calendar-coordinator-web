@@ -19,7 +19,7 @@ link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/c
 
 - if @group
   div class = "row"
-    div class="col-sm-2" style="margin-top: 10px;"
+    div class="col-sm-3" style="margin-top: 10px;"
       ul
         li class="dropdown"
           a class="btn-lg dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" 
@@ -37,7 +37,13 @@ link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/c
           a class="btn" href="/group/#{@group.id}/calendar/#{calendar_mode}/#{event_type}/#{(@calendar_start_date + @calendar_mode_date).year}-#{(@calendar_start_date + @calendar_mode_date).month}-#{(@calendar_start_date + @calendar_mode_date).day}"
             i class="fa fa-chevron-right" style="color:black"
 
-    div class="col-sm-5"
+    div class="col-sm-4" style="margin-top: 10px;"
+      - if (@calendar_start_date + @calendar_mode_date).year == @calendar_start_date.year && (@calendar_start_date + @calendar_mode_date).month == @calendar_start_date.month
+        h4 #{@calendar_start_date.to_time.strftime('%b')} #{@calendar_start_date.year}
+      - elsif (@calendar_start_date + @calendar_mode_date).year == @calendar_start_date.year && (@calendar_start_date + @calendar_mode_date).month != @calendar_start_date.month
+        h4 #{@calendar_start_date.to_time.strftime('%b')} - #{(@calendar_start_date + @calendar_mode_date).to_time.strftime('%b')} #{@calendar_start_date.year}
+      - elsif (@calendar_start_date + @calendar_mode_date).year != @calendar_start_date.year && (@calendar_start_date + @calendar_mode_date).month != @calendar_start_date.month
+        h4 #{@calendar_start_date.to_time.strftime('%b')} #{@calendar_start_date.year} - #{(@calendar_start_date + @calendar_mode_date).to_time.strftime('%b')} #{(@calendar_start_date + @calendar_mode_date).year}
 
     - if @calendar_start_date && @calendar_mode_date
       div class="col-sm-2" style="margin-top: 10px;"
