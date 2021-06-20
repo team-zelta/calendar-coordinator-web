@@ -37,11 +37,20 @@ div class = "row"
   
 br
 
+
 div class="row"
   div class="col-sm-1"
   div class="col-sm-5"
-    a class="btn btn-primary" href='/google/calendar' Connect to Google Calendar
-
+    h1 Google Calendar
+div class="row"
+  div class="col-sm-1"
+  div class="col-sm-11"
+    - unless is_connected_google
+      a class="btn btn-primary" href='/google/calendar' Connect to Google Calendar
+    - else
+      p Switch to another Google Calendar Account
+      a class="btn btn-primary" href='/google/switch' Switch
+br
 
 .row.top-buffer.mt-3
   .col-sm-1

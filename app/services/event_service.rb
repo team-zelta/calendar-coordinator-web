@@ -12,7 +12,7 @@ module CalendarCoordinator
     def save_from_google(current_account:, calendar_gid:, google_events:)
       response = HTTP.auth("Bearer #{current_account.auth_token}")
                      .post("#{@config.API_URL}/google/calendar/#{calendar_gid}/events", json: google_events)
-      raise('Save failed') unless response.code == 201
+      raise('Failed to Save') unless response.code == 201
     end
   end
 end

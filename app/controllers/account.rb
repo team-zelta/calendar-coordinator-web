@@ -26,13 +26,13 @@ module CalendarCoordinator
             password: routing.params['password']
           )
 
-          flash[:notice] = 'Register success, you can login now!'
+          flash[:notice] = 'Register successfully, you can login now!'
           routing.redirect @login_route
         rescue InvalidAcountError
           flash[:error] = 'This Account can not be registered.'
           routing.redirect '/auth/register'
         rescue StandardError
-          flash[:error] = 'Register failed, please try again'
+          flash[:error] = 'Failed to register, please try again'
           routing.redirect '/account/register'
         end
       end
@@ -54,10 +54,13 @@ module CalendarCoordinator
 
         previous_path = CurrentSession.new(session).location
 
+        is_connected_google = !CurrentSession.new(session).credentials(@current_account).nil?
+
         if @current_account.username == username
           view :account, locals: { account_detail: account_detail,
                                    calendars: calendar_list,
-                                   previous_path: previous_path }
+                                   previous_path: previous_path,
+                                   is_connected_google: is_connected_google }
         else
           routing.redirect @login_route
         end

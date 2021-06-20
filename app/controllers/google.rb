@@ -23,7 +23,7 @@ module CalendarCoordinator
                                                                                verify_mode: OpenSSL::SSL::VERIFY_NONE
                                                                              }))
 
-    route('google') do |routing|
+    route('google') do |routing| # rubocop:disable Metrics/BlockLength
       routing.is 'calendar' do
         current_account = CurrentSession.new(session).current_account
         user_id = current_account.email
@@ -43,7 +43,27 @@ module CalendarCoordinator
         calendar_service = CalendarService.new(App.config)
         calendar_service.save(account_id: current_account.id, calendars: calendar_list)
 
-        routing.redirect '/'
+        flash[:notice] = 'Connect to Google Calendar Successfully'
+        routing.redirect "/account/#{current_account.username}"
+      rescue StandardError => e
+        puts e.full_message
+
+        flash[:error] = 'Failed to Connect to Google Calendar'
+        routing.redirect "/account/#{current_account.username}"
+      end
+
+      routing.is 'switch' do
+        if CurrentSession.new(session).credentials(@current_account)
+          result = CurrentSession.new(session).delete_credentials(@current_account)
+          puts result
+        end
+
+        routing.redirect '/google/calendar'
+      rescue StandardError => e
+        puts e.full_message
+
+        flash[:error] = 'Failed to Switch to Google Calendar'
+        routing.redirect "/account/#{@current_account.username}"
       end
     end
 

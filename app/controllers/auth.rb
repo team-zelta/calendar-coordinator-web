@@ -62,7 +62,7 @@ module CalendarCoordinator
           flash[:notice] = 'Verification email has sent to your email, please check.'
           routing.redirect '/'
         rescue StandardError => e
-          puts "Send verification email failed: #{e.inspect}"
+          puts "Failed to send verification email: #{e.inspect}"
           puts e.full_message
           flash[:error] = 'Registeration failed, please try again.'
           routing.redirect @register_route
