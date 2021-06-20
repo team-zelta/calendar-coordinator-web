@@ -26,13 +26,13 @@ module CalendarCoordinator
             password: routing.params['password']
           )
 
-          flash[:notice] = 'Register success, you can login now!'
+          flash[:notice] = 'Register successfully, you can login now!'
           routing.redirect @login_route
         rescue InvalidAcountError
           flash[:error] = 'This Account can not be registered.'
           routing.redirect '/auth/register'
         rescue StandardError
-          flash[:error] = 'Register failed, please try again'
+          flash[:error] = 'Failed to register, please try again'
           routing.redirect '/account/register'
         end
       end

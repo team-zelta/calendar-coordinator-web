@@ -22,7 +22,7 @@ module CalendarCoordinator
       routing.on 'join' do
         routing.get String do |invitation_token|
           invitation = SecureMessage.decrypt(invitation_token)
-          raise('Join Group failed') unless invitation['email'] == @current_account.email
+          raise('Failed to join Group') unless invitation['email'] == @current_account.email
 
           group_service = GroupService.new(App.config)
           group_service.join(@current_account, invitation['group_id'])
@@ -32,7 +32,7 @@ module CalendarCoordinator
           routing.redirect "#{routing_url}/#{DateTime.now.year}-#{DateTime.now.month}-#{DateTime.now.day}"
         rescue StandardError => e
           puts e.full_message
-          flash[:error] = 'Join Group failed, please contact to the group owner to try again.'
+          flash[:error] = 'Failed to join Group, please contact to the group owner to try again.'
           routing.redirect '/group'
         end
       end
@@ -57,7 +57,7 @@ module CalendarCoordinator
             flash[:notice] = 'Invitation email has sent.'
             routing.redirect "/group/#{group_id}/setting"
           rescue StandardError => e
-            puts "Send Invitation email failed: #{e.inspect}"
+            puts "Failed to send Invitation email: #{e.inspect}"
             puts e.full_message
             flash[:error] = "Invitation failed, #{e.message}, please try again."
             routing.redirect "/group/#{group_id}/invite"
@@ -94,12 +94,12 @@ module CalendarCoordinator
               calendar_id = routing.params['calendar-radios']
               GroupService.new(App.config).add_calendar(@current_account, group_id, calendar_id)
 
-              flash[:notice] = 'Add calendar success!'
+              flash[:notice] = 'Add calendar successfully!'
 
               routing.redirect "/group/#{group_id}/setting"
             rescue StandardError => e
               puts e.full_message
-              flash[:errot] = 'Add calendar failed, please try again.'
+              flash[:errot] = 'Failed to add calendar, please try again.'
 
               routing.redirect "/group/#{group_id}/setting"
             end
@@ -202,7 +202,7 @@ module CalendarCoordinator
                 routing.redirect "/group/#{group_id}/setting"
               rescue StandardError => e
                 puts e.full_message
-                flash[:error] = 'Delete user failed!'
+                flash[:error] = 'Delete user unsuccessfully!'
                 routing.redirect "/group/#{group_id}/setting"
               end
             end
@@ -214,10 +214,10 @@ module CalendarCoordinator
           routing.get do
             GroupService.new(App.config).delete(@current_account, group_id)
 
-            flash[:notice] = 'Delete group success!'
+            flash[:notice] = 'Delete group successfully!'
             routing.redirect '/group'
           rescue StandardError
-            flash[:error] = 'Delete group failed!'
+            flash[:error] = 'Failed to delete group!'
             routing.redirect '/group'
           end
         end
@@ -230,11 +230,11 @@ module CalendarCoordinator
 
             GroupService.new(App.config).update(current_account: @current_account, group: group.to_h)
 
-            flash[:notice] = 'Update group name success!'
+            flash[:notice] = 'Update group name successfully!'
             routing.redirect "/group/#{group_id}/setting"
           rescue StandardError => e
             puts e.full_message
-            flash[:error] = 'Update group name failed!'
+            flash[:error] = 'Failed to update group name!'
             routing.redirect "/group/#{group_id}/setting"
           end
         end
@@ -262,7 +262,7 @@ module CalendarCoordinator
         routing.redirect "#{routing_url}/#{DateTime.now.year}-#{DateTime.now.month}-#{DateTime.now.day}"
       rescue StandardError => e
         puts e.full_message
-        flash[:error] = 'Create Group failed, please try again'
+        flash[:error] = 'Failed to Create Group, please try again'
         routing.redirect '/group/create'
       end
     end

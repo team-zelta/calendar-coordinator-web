@@ -47,7 +47,7 @@ module CalendarCoordinator
 
       response = HTTP.post("#{@config.API_URL}/accounts/#{account_id}/calendars", json: calendar_lists)
 
-      raise('Save failed') unless response.code == 201
+      raise('Failed to save') unless response.code == 201
 
       JSON.parse(response.body)
     end
@@ -60,7 +60,7 @@ module CalendarCoordinator
                      .post("#{@config.API_URL}/groups/#{group_id}/common-busy-time/#{calendar_mode}/#{datetime}",
                            json: credentials)
 
-      raise('Get Common Busy Time failed') unless response.code == 200
+      raise('Failed to Get Common Busy Time') unless response.code == 200
 
       JSON.parse(response.body, object_class: OpenStruct)
     end
@@ -72,7 +72,7 @@ module CalendarCoordinator
       response = HTTP.auth("Bearer #{current_account.auth_token}")
                      .post("#{@config.API_URL}/groups/#{group_id}/events/#{calendar_mode}/#{datetime}",
                            json: credentials)
-      raise('Get All Events failed') unless response.code == 200
+      raise('Failed to Get All Events') unless response.code == 200
 
       JSON.parse(response.body, object_class: OpenStruct)
     end

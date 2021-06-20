@@ -15,7 +15,7 @@ module CalendarCoordinator
       response = HTTP.auth("Bearer #{current_account.auth_token}")
                      .get("#{@config.API_URL}/groups/#{group_id}")
 
-      raise('Get Group failed') unless response.code == 200
+      raise('Failed to Get Group') unless response.code == 200
 
       JSON.parse(response.body, object_class: OpenStruct)
     end
@@ -23,7 +23,7 @@ module CalendarCoordinator
     # Get Group Owned Calendars
     def owned_calendars(group_id:)
       response = HTTP.get("#{@config.API_URL}/groups/#{group_id}/calendars")
-      raise('Get Owned Calendars failed') unless response.code == 200
+      raise('Failed to Get Owned Calendars') unless response.code == 200
 
       JSON.parse(response.body, object_class: OpenStruct)
     end
@@ -31,7 +31,7 @@ module CalendarCoordinator
     # Get Group Owned Calendars Account email
     def owned_calendars_account_emails(group_id:)
       response = HTTP.get("#{@config.API_URL}/groups/#{group_id}/calendar-account-email")
-      raise('Get Owned Calendars failed') unless response.code == 200
+      raise('Failed to Get Owned Calendars') unless response.code == 200
 
       JSON.parse(response.body)
     end
@@ -39,7 +39,7 @@ module CalendarCoordinator
     # Get Group Owned Accounts
     def owned_accounts(group_id:)
       response = HTTP.get("#{@config.API_URL}/groups/#{group_id}/accounts")
-      raise('Get Owned Accounts failed') unless response.code == 200
+      raise('Failed to Get Owned Accounts') unless response.code == 200
 
       JSON.parse(response.body, object_class: OpenStruct)
     end
@@ -48,7 +48,7 @@ module CalendarCoordinator
     def list(current_account:)
       response = HTTP.auth("Bearer #{current_account.auth_token}")
                      .get("#{@config.API_URL}/groups")
-      raise('Get Group List failed') unless response.code == 200
+      raise('Failed to Get Group List') unless response.code == 200
 
       JSON.parse(response.body, object_class: OpenStruct)
     end
@@ -58,7 +58,7 @@ module CalendarCoordinator
       response = HTTP.auth("Bearer #{current_account.auth_token}")
                      .post("#{@config.API_URL}/groups", json: group)
 
-      raise('Create Group failed') unless response.code == 201
+      raise('Failed to Create Group') unless response.code == 201
 
       JSON.parse(response.body, object_class: OpenStruct)
     end
@@ -68,7 +68,7 @@ module CalendarCoordinator
       response = HTTP.auth("Bearer #{current_account.auth_token}")
                      .post("#{@config.API_URL}/groups/#{group[:id]}/update", json: { groupname: group[:groupname] })
 
-      raise('Update Group failed') unless response.code == 201
+      raise('Failed to Update Group') unless response.code == 201
     end
 
     # Invite account to group
@@ -90,7 +90,7 @@ module CalendarCoordinator
       response = HTTP.auth("Bearer #{current_account.auth_token}")
                      .post("#{@config.API_URL}/groups/join", json: { group_id: group_id })
 
-      raise('Join Group failed') unless response.code == 201
+      raise('Failed to Join Group') unless response.code == 201
     end
 
     # Delete Group
@@ -98,7 +98,7 @@ module CalendarCoordinator
       response = HTTP.auth("Bearer #{current_account.auth_token}")
                      .get("#{@config.API_URL}/groups/#{group_id}/delete")
 
-      raise('Join Group failed') unless response.code == 200
+      raise('Failed to Join Group') unless response.code == 200
     end
 
     # Delete account from group
@@ -106,7 +106,7 @@ module CalendarCoordinator
       response = HTTP.auth("Bearer #{current_account.auth_token}")
                      .get("#{@config.API_URL}/groups/#{group_id}/accounts/#{account_id}/delete")
 
-      raise('Delete account from group failed') unless response.code == 200
+      raise('Failed to delete account from group') unless response.code == 200
     end
 
     # Get Assign Calendar by Account
@@ -114,7 +114,7 @@ module CalendarCoordinator
       response = HTTP.auth("Bearer #{current_account.auth_token}")
                      .get("#{@config.API_URL}/groups/#{group_id}/accounts/#{account_id}/calendar")
 
-      raise('Get Assign Calendar by Account failed') unless response.code == 200
+      raise('Failed to Get Assign Calendar by Account') unless response.code == 200
 
       JSON.parse(response.body)
     end
@@ -125,7 +125,7 @@ module CalendarCoordinator
                      .post("#{@config.API_URL}/groups/add-calendar", json: { group_id: group_id,
                                                                              calendar_id: calendar_id })
 
-      raise('Add Calendar failed') unless response.code == 201
+      raise('Failed to Add Calendar') unless response.code == 201
     end
   end
 end
