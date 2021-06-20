@@ -78,7 +78,17 @@ module CalendarCoordinator
                                                                                @current_account.id)
 
               if @account_calendar.count.zero?
-                @current_account_calendars = CalendarService.new(App.config).list_calendar(@current_account)
+                # Google OAuth2
+                authorizer = Google::Auth::WebUserAuthorizer.new(CLIENT_ID, SCOPE, TOKEN_STORE)
+                credentials = authorizer.get_credentials(@current_account.email, request)
+
+                google_calendar = Google::Apis::CalendarV3::CalendarService.new
+                google_calendar.authorization = credentials
+
+                google_credentials = GoogleCredentials.new(credentials)
+
+                @current_account_calendars = CalendarService.new(App.config).list_calendar(@current_account,
+                                                                                           google_credentials)
               end
 
               view :calendar_list, locals: { group: owned_calendars.group, group_id: group_id }
@@ -163,13 +173,24 @@ module CalendarCoordinator
         end
 
         # GET /group/{group_id}/setting
-        routing.is 'setting' do
+        routing.is 'setting' do # rubocop:disable Metrics/BlockLength
           routing.get do
             @group_members = GroupService.new(App.config).owned_accounts(group_id: group_id)
             @account_calendar = GroupService.new(App.config).get_assign_calendar_by_account(@current_account,
                                                                                             group_id,
                                                                                             @current_account.id)
-            @current_account_calendars = CalendarService.new(App.config).list_calendar(@current_account)
+
+            # Google OAuth2
+            authorizer = Google::Auth::WebUserAuthorizer.new(CLIENT_ID, SCOPE, TOKEN_STORE)
+            credentials = authorizer.get_credentials(@current_account.email, request)
+
+            google_calendar = Google::Apis::CalendarV3::CalendarService.new
+            google_calendar.authorization = credentials
+
+            google_credentials = GoogleCredentials.new(credentials)
+
+            @current_account_calendars = CalendarService.new(App.config).list_calendar(@current_account,
+                                                                                       google_credentials)
 
             @members_calendars = []
             @group_members.each do |member|
