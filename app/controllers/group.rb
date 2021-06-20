@@ -78,7 +78,7 @@ module CalendarCoordinator
                                                                                @current_account.id)
 
               if @account_calendar.count.zero?
-                @current_account_calendars = CalendarService.new(App.config).list_calendars(@current_account)
+                @current_account_calendars = CalendarService.new(App.config).list_calendar(@current_account)
               end
 
               view :calendar_list, locals: { group: owned_calendars.group, group_id: group_id }
@@ -169,7 +169,7 @@ module CalendarCoordinator
             @account_calendar = GroupService.new(App.config).get_assign_calendar_by_account(@current_account,
                                                                                             group_id,
                                                                                             @current_account.id)
-            @current_account_calendars = CalendarService.new(App.config).list_calendars(@current_account)
+            @current_account_calendars = CalendarService.new(App.config).list_calendar(@current_account)
 
             @members_calendars = []
             @group_members.each do |member|
