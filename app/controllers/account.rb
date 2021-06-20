@@ -54,10 +54,13 @@ module CalendarCoordinator
 
         previous_path = CurrentSession.new(session).location
 
+        is_connected_google = !CurrentSession.new(session).credentials(@current_account).nil?
+
         if @current_account.username == username
           view :account, locals: { account_detail: account_detail,
                                    calendars: calendar_list,
-                                   previous_path: previous_path }
+                                   previous_path: previous_path,
+                                   is_connected_google: is_connected_google }
         else
           routing.redirect @login_route
         end

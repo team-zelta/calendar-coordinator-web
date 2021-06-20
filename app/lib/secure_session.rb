@@ -43,4 +43,22 @@ class SecureSession
   def delete(key)
     @session.delete(key)
   end
+
+  def get_google_credentials(key)
+    redis = Redis.new(url: ENV['REDIS_TLS_URL'],
+                      ssl_params: {
+                        verify_mode: OpenSSL::SSL::VERIFY_NONE
+                      })
+
+    redis.get(key)
+  end
+
+  def delete_google_credentials(key)
+    redis = Redis.new(url: ENV['REDIS_TLS_URL'],
+                      ssl_params: {
+                        verify_mode: OpenSSL::SSL::VERIFY_NONE
+                      })
+
+    redis.del(key)
+  end
 end

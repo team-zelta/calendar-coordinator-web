@@ -33,5 +33,13 @@ module CalendarCoordinator
     def location
       @secure_session.get(:return_to)
     end
+
+    def credentials(account)
+      @secure_session.get_google_credentials("g-user-token:#{account.email}")
+    end
+
+    def delete_credentials(account)
+      @secure_session.delete_google_credentials("g-user-token:#{account.email}")
+    end
   end
 end
