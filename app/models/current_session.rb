@@ -25,8 +25,8 @@ module CalendarCoordinator
     end
 
     # Page path for redirect
-    def store_location=(request)
-      @secure_session.set(:return_to, request.fullpath)
+    def store_location=(path)
+      @secure_session.set(:return_to, path)
     end
 
     # Page path for redirect

@@ -45,19 +45,20 @@ module CalendarCoordinator
         calendar_service = CalendarService.new(App.config)
         calendar_service.save(account_id: current_account.id, calendars: calendar_list)
 
+        CurrentSession.new(session).store_location = '/'
         flash[:notice] = 'Connect to Google Calendar Successfully'
         routing.redirect "/account/#{current_account.username}"
       rescue StandardError => e
         puts e.full_message
 
+        CurrentSession.new(session).store_location = '/'
         flash[:error] = 'Failed to Connect to Google Calendar'
         routing.redirect "/account/#{current_account.username}"
       end
 
       routing.is 'switch' do
         if CurrentSession.new(session).credentials(@current_account)
-          result = CurrentSession.new(session).delete_credentials(@current_account)
-          puts result
+          CurrentSession.new(session).delete_credentials(@current_account)
         end
 
         routing.redirect '/google/calendar'

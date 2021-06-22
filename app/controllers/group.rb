@@ -27,13 +27,13 @@ module CalendarCoordinator
           group_service = GroupService.new(App.config)
           group_service.join(@current_account, invitation['group_id'])
 
-          flash[:notice] = 'Join Group Success!'
+          flash[:notice] = 'Join Group Successfully!'
           routing_url = "/group/#{invitation['group_id']}/calendar/week/common-busy-time"
           routing.redirect "#{routing_url}/#{DateTime.now.year}-#{DateTime.now.month}-#{DateTime.now.day}"
         rescue StandardError => e
           puts e.full_message
           flash[:error] = 'Failed to join Group, please contact to the group owner to try again.'
-          routing.redirect '/group'
+          routing.redirect '/'
         end
       end
 
@@ -151,7 +151,7 @@ module CalendarCoordinator
 
                 @group_list = group_service.list(current_account: @current_account)
 
-                CurrentSession.new(session).store_location = request
+                CurrentSession.new(session).store_location = request.fullpath
 
                 view 'events', locals: { calendar_mode: calendar_mode, event_type: event_type }
               rescue StandardError => e
@@ -185,9 +185,13 @@ module CalendarCoordinator
 
             @group = GroupService.new(App.config).get(@current_account, group_id)
 
+            is_default_group = @group.groupname == @group_members.first.email
+
             previous_path = CurrentSession.new(session).location
 
-            view :group_setting, locals: { group_id: group_id, previous_path: previous_path }
+            view :group_setting, locals: { group_id: group_id,
+                                           previous_path: previous_path,
+                                           is_default_group: is_default_group }
           end
         end
 
@@ -215,10 +219,10 @@ module CalendarCoordinator
             GroupService.new(App.config).delete(@current_account, group_id)
 
             flash[:notice] = 'Delete group successfully!'
-            routing.redirect '/group'
+            routing.redirect '/'
           rescue StandardError
             flash[:error] = 'Failed to delete group!'
-            routing.redirect '/group'
+            routing.redirect '/'
           end
         end
 
