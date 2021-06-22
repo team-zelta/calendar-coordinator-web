@@ -52,7 +52,7 @@ module CalendarCoordinator
         google_credentials = GoogleCredentials.new(credentials)
         calendar_list = CalendarService.new(App.config).list_calendar(@current_account, google_credentials)
 
-        previous_path = CurrentSession.new(session).location
+        previous_path = CurrentSession.new(session).location || '/'
 
         is_connected_google = !CurrentSession.new(session).credentials(@current_account).nil?
 
