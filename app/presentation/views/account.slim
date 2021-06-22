@@ -5,17 +5,17 @@ div class = "row"
       a class="btn" href="#{previous_path}" title="Back"
         i class="fa fa-arrow-left fa-lg" style="color:black"
     div class="col-sm-6"
-      h1 Account
+      h2 Account
 
 div class="row"
   div class="col-sm-1"
-  div class="col-sm-1" Username:
-  div class="col-sm-10"
+  div class="col-sm-2" Username: 
+  div class="col-sm-9"
     == account_detail.username
 div class="row"
   div class="col-sm-1"
-  div class="col-sm-1" Email:
-  div class="col-sm-10"
+  div class="col-sm-2" Email: 
+  div class="col-sm-9"
     == account_detail.email
 
 br 
@@ -23,7 +23,7 @@ br
 div class = "row"
   div class="col-sm-1" 
   div class="col-sm-4"
-    h1 My Calendar
+    h2 My Calendar
 div class = "row"
   div class="col-sm-1" 
   div class="col-sm-4"
@@ -37,19 +37,19 @@ div class = "row"
   
 br
 
-
 div class="row"
   div class="col-sm-1"
   div class="col-sm-5"
-    h1 Google Calendar
+    h2 Google Calendar
 div class="row"
   div class="col-sm-1"
   div class="col-sm-11"
     - unless is_connected_google
       a class="btn btn-primary" href='/google/calendar' Connect to Google Calendar
     - else
-      p Switch to another Google Calendar Account
-      a class="btn btn-primary" href='/google/switch' Switch
+      p You can switch to another Google Calendar account, or synchronize the calendar 
+      p if you add/delete/rename calendar at Google Calendar
+      a class="btn btn-primary" href='/google/switch' Switch / Sync
 br
 
 .row.top-buffer.mt-3
