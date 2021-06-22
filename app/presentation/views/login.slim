@@ -27,13 +27,10 @@ div class="row text-center"
   div class="col-sm-3"
     a class="btn btn-social btn-lg btn-github" href='/github/login'
       span class="fa fa-github"
-      == "Sign in via GitHub"
+      == "Sign in with GitHub"
   div class="col-sm-3"
-    a class="btn btn-social btn-lg btn-google" href='/google/login'
-      span class="fa fa-google"
-      == "Sign in via Google"
-  div class="col-sm-3"
-    div class="g-signin2" data-width="240" data-height="50" data-longtitle="true"
+    a class="btn" href='/google/login'
+      img alt="ZetaCal" src="/google_sign_in.png" style="max-width:240px; max-height=50px; margin-top: -12px;"
+  div class="col-sm-3"   
 
 script src="#{ENV['APP_URL']}/js/login.js"
-script src="https://apis.google.com/js/platform.js?onload=renderButton" async defer

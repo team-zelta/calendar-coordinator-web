@@ -70,7 +70,7 @@ module CalendarCoordinator
 
       routing.is 'login' do
         auth_url = 'https://accounts.google.com/o/oauth2/v2/auth?'
-        auth_url += 'scope=https%3A//www.googleapis.com/auth/userinfo.profile&'
+        auth_url += 'scope=https%3A//www.googleapis.com/auth/userinfo.email&'
         auth_url += 'access_type=offline&'
         auth_url += 'include_granted_scopes=true&'
         auth_url += 'response_type=code&'
@@ -100,7 +100,7 @@ module CalendarCoordinator
         CurrentSession.new(session).current_account = current_account
 
         flash[:notice] = "Welcome #{current_account.username}!"
-        routing.redirect '/'
+        routing.redirect '/calendars/check'
       rescue AuthorizeGithubAccount::UnauthorizedError
         flash[:error] = 'Could not login with Google'
         response.status = 403

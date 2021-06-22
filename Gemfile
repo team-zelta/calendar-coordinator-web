@@ -28,7 +28,6 @@ gem 'secure_headers'
 gem 'dry-validation'
 
 # Google
-gem 'google-api-client'
 gem 'google-apis-calendar_v3'
 gem 'google-apis-oauth2_v2'
 gem 'googleauth'

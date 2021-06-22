@@ -23,6 +23,7 @@ module CalendarCoordinator
 
       # GET /
       routing.root do
+        puts "app #{@current_account.logged_in?}"
         if @current_account.logged_in?
           group_list = GroupService.new(App.config).list(current_account: @current_account)
 
