@@ -23,8 +23,17 @@ br
 h4.text-center or
 br
 div class="row text-center"  
-  div class="col-sm-4"
-  div class="col-sm-4"
+  div class="col-sm-3"
+  div class="col-sm-3"
     a class="btn btn-social btn-lg btn-github" href='/github/login'
       span class="fa fa-github"
       == "Sign in via GitHub"
+  div class="col-sm-3"
+    a class="btn btn-social btn-lg btn-google" href='/google/login'
+      span class="fa fa-google"
+      == "Sign in via Google"
+  div class="col-sm-3"
+    div class="g-signin2" data-width="240" data-height="50" data-longtitle="true"
+
+script src="#{ENV['APP_URL']}/js/login.js"
+script src="https://apis.google.com/js/platform.js?onload=renderButton" async defer
