@@ -128,6 +128,7 @@ module CalendarCoordinator
                                                                    calendar_mode: calendar_mode,
                                                                    date: date,
                                                                    credentials: credentials_list)
+                  @events_list_view = Views::EventList.new(@events)
                 else
                   @event_list = calendar_service.list_events(current_account: @current_account,
                                                              group_id: group_id,
@@ -143,9 +144,9 @@ module CalendarCoordinator
 
                 # day or week
                 @calendar_start_date = if calendar_mode == 'day'
-                                         DateTime.parse(date)
+                                         Date.parse(date)
                                        else
-                                         DateTime.parse(date) - DateTime.parse(date).wday
+                                         Date.parse(date) - Date.parse(date).wday
                                        end
                 @calendar_mode_date = calendar_mode == 'day' ? 1 : 7
 
