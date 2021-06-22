@@ -4,6 +4,8 @@ require 'roda'
 require 'googleauth'
 require 'googleauth/stores/redis_token_store'
 require 'google/apis/calendar_v3'
+require 'google/apis/oauth2_v2'
+require 'google/api_client/client_secrets'
 require 'date'
 require 'fileutils'
 require_relative './app'
@@ -65,11 +67,50 @@ module CalendarCoordinator
         flash[:error] = 'Failed to Switch to Google Calendar'
         routing.redirect "/account/#{@current_account.username}"
       end
+
+      routing.is 'login' do
+        auth_url = 'https://accounts.google.com/o/oauth2/v2/auth?'
+        auth_url += 'scope=https%3A//www.googleapis.com/auth/userinfo.email&'
+        auth_url += 'access_type=offline&'
+        auth_url += 'include_granted_scopes=true&'
+        auth_url += 'response_type=code&'
+        auth_url += 'state=state_parameter_passthrough_value&'
+        auth_url += "redirect_uri=#{ENV['APP_URL']}/login_oauth2callback&"
+        auth_url += "client_id=#{ENV['GOOGLE_CREDENTIALS_CLIENT_ID']}"
+
+        routing.redirect auth_url
+      end
     end
 
     route('oauth2callback') do |routing|
       target_url = Google::Auth::WebUserAuthorizer.handle_auth_callback_deferred(request)
       routing.redirect target_url
+    end
+
+    route('login_oauth2callback') do |routing|
+      routing.get do
+        authorized = AuthorizeGoogleAccount.new(App.config)
+                                           .call(routing.params['code'])
+
+        current_account = Account.new(
+          authorized[:account],
+          authorized[:auth_token]
+        )
+
+        CurrentSession.new(session).current_account = current_account
+
+        flash[:notice] = "Welcome #{current_account.username}!"
+        routing.redirect '/calendars/check'
+      rescue AuthorizeGithubAccount::UnauthorizedError
+        flash[:error] = 'Could not login with Google'
+        response.status = 403
+        routing.redirect @login_route
+      rescue StandardError => e
+        puts "SSO LOGIN ERROR: #{e.inspect}\n#{e.backtrace}"
+        flash[:error] = 'Unexpected API Error'
+        response.status = 500
+        routing.redirect @login_route
+      end
     end
   end
 end

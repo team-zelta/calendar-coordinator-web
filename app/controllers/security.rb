@@ -20,6 +20,7 @@ module CalendarCoordinator
                   https://cdnjs.cloudflare.com].freeze
     SCRIPT_SRC = %w[https://cdn.jsdelivr.net
                     https://ajax.googleapis.com
+                    https://apis.google.com
                     #{ENV['APP_URL']}].freeze
     STYLE_SRC = %w[https://bootswatch.com
                    https://cdn.jsdelivr.net

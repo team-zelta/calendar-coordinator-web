@@ -56,7 +56,7 @@ module CalendarCoordinator
 
         is_connected_google = !CurrentSession.new(session).credentials(@current_account).nil?
 
-        if @current_account.username == username
+        if @current_account.username == CGI.unescape(username)
           view :account, locals: { account_detail: account_detail,
                                    calendars: calendar_list,
                                    previous_path: previous_path,
