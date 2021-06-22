@@ -202,11 +202,11 @@ module CalendarCoordinator
               routing.get do
                 GroupService.new(App.config).delete_account(@current_account, group_id, account_id)
 
-                flash[:notice] = 'Delete user success!'
+                flash[:notice] = 'Delete user successfully!'
                 routing.redirect "/group/#{group_id}/setting"
               rescue StandardError => e
                 puts e.full_message
-                flash[:error] = 'Delete user unsuccessfully!'
+                flash[:error] = 'Failed to delete user!'
                 routing.redirect "/group/#{group_id}/setting"
               end
             end
