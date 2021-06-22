@@ -19,7 +19,7 @@ link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/c
 
 - if @group
   div class = "row"
-    div class="col-sm-3" style="margin-top: 10px;"
+    div class="col-sm-3" style="margin-top: 12px; margin-left: -70px;"
       ul
         li class="dropdown"
           a class="btn-lg dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" 
@@ -31,7 +31,7 @@ link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/c
                   a class="dropdown-item" href="/group/#{group.id}/calendar/week/common-busy-time/#{DateTime.now.year}-#{DateTime.now.month}-#{DateTime.now.day}" #{group.groupname}
             a class="dropdown-item" href="/group/create" + Create
     - if @calendar_start_date && @calendar_mode_date
-      div class="col-sm-2" style="margin-top: 10px;"
+      div class="col-sm-2" style="margin-top: 10px; margin-left: 70px;"
           a class="btn" href="/group/#{@group.id}/calendar/#{calendar_mode}/#{event_type}/#{(@calendar_start_date - @calendar_mode_date).year}-#{(@calendar_start_date - @calendar_mode_date).month}-#{(@calendar_start_date - @calendar_mode_date).day}"
             i class="fa fa-chevron-left" style="color:black"
           a class="btn" href="/group/#{@group.id}/calendar/#{calendar_mode}/#{event_type}/#{(@calendar_start_date + @calendar_mode_date).year}-#{(@calendar_start_date + @calendar_mode_date).month}-#{(@calendar_start_date + @calendar_mode_date).day}"
