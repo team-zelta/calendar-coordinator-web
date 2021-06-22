@@ -37,8 +37,8 @@ div class = "container"
         div class="form-group"
         div class = "row"
           div class="col-sm-4"
-            input type='text' name='groupname' id='input-groupname' value = "#{@group.groupname}" class="form-control"
-          - unless is_default_group
+            input type='text' name='groupname' id='input-groupname' value = "#{@group.groupname}" class="form-control" readonly=is_default_group||!@group.policies.can_edit
+          - unless is_default_group||!@group.policies.can_edit
             div class="col-sm-2"
               button type='submit' id='button-login' class="btn btn-primary btn-block" Rename
   br
