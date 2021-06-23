@@ -20,20 +20,7 @@ module Views
       events_to_weekday
     end
 
-    def events_to_weekday
-      # now = DateTime.now
-      # filter out the events start before 9 and after 19
-      # events_worktime = @events.reject { |event| event.start_time.hour < 9 || event.start_time.hour > 19 }
-
-      # if the end time is after 19, only show it to 19
-      # events_worktime.map! do |event|
-      #   if event.end_time.hour >= 19
-      #     event.end_time = DateTime.new(now.year, now.month, now.day, 19, 0, 0, now.zone)
-      #     event.update_css_timestr
-      #   end
-      #   event
-      # end
-
+    def events_to_weekday # rubocop:disable Metrics/CyclomaticComplexity, Metrics/MethodLength
       @events.each do |event|
         case event.start_time.wday
         when 0
