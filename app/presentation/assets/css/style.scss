@@ -1,0 +1,202 @@
+.force-wrap {
+  word-wrap: break-word;
+  width: 100%;
+  display: block;
+}
+
+:root {
+  --schedule-rows-number: 36;
+  --schedule-rows-height: 50px;
+
+  // spacing
+  --space-unit: 1em;
+  --space-xxxxs: calc(0.125 * var(--space-unit));
+  --space-xxxs: calc(0.25 * var(--space-unit));
+  --space-xxs: calc(0.375 * var(--space-unit));
+  --space-xs: calc(0.5 * var(--space-unit));
+  --space-sm: calc(0.75 * var(--space-unit));
+  --space-md: calc(1.25 * var(--space-unit));
+  --space-lg: calc(2 * var(--space-unit));
+  --space-xl: calc(3.25 * var(--space-unit));
+  --space-xxl: calc(5.25 * var(--space-unit));
+  --space-xxxl: calc(8.5 * var(--space-unit));
+  --space-xxxxl: calc(13.75 * var(--space-unit));
+  --component-padding: var(--space-md);
+
+  --max-width-xl: 90rem;
+
+  // font size
+  --text-base-size: 1em; // body font-size
+  --text-scale-ratio: 1.2; // multiplier used to generate the scale value
+
+  // font type scale
+  --text-xs: calc(
+    (var(--text-base-size) / var(--text-scale-ratio)) / var(--text-scale-ratio)
+  );
+  --text-sm: calc(var(--text-xs) * var(--text-scale-ratio));
+  --text-md: calc(
+    var(--text-sm) * var(--text-scale-ratio) * var(--text-scale-ratio)
+  );
+  --text-lg: calc(var(--text-md) * var(--text-scale-ratio));
+  --text-xl: calc(var(--text-lg) * var(--text-scale-ratio));
+  --text-xxl: calc(var(--text-xl) * var(--text-scale-ratio));
+  --text-xxxl: calc(var(--text-xxl) * var(--text-scale-ratio));
+  --text-xxxxl: calc(var(--text-xxxl) * var(--text-scale-ratio));
+
+  // color
+  --color-border: hsl(0, 0%, 92%);
+  --color-event-1: hsl(199, 25%, 46%);
+}
+
+li {
+  list-style-type: none;
+}
+
+.schedule {
+  position: relative;
+  width: calc(100% - 2 * var(--component-padding));
+  margin-left: auto;
+  margin-right: auto;
+  max-width: var(--max-width-xl);
+  margin-top: 60px;
+}
+
+.timeline {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  padding-top: var(--schedule-rows-height);
+  max-width: 90rem;
+
+  li {
+    position: relative;
+    height: var(--schedule-rows-height);
+
+    span {
+      display: inline-block;
+      transform: translateY(-50%);
+      font-size: var(--text-sm);
+    }
+
+    &:nth-of-type(2n) span {
+      display: none;
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      width: calc(100% - 60px);
+      left: 60px;
+      height: 1px;
+      background: var(--color-border);
+    }
+
+    &:last-of-type::after {
+      display: none;
+    }
+  }
+}
+
+.events {
+  position: relative;
+  z-index: 1;
+
+  width: calc(100% - 60px);
+  margin-left: 60px; // same as .timelie li::after left
+
+  nav {
+    height: var(--schedule-rows-height);
+    margin-left: 2rem;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+  }
+
+  > ul {
+    display: flex;
+    flex-wrap: nowrap;
+  }
+}
+
+.weekday {
+  width: 100%;
+
+  > li {
+    flex-basis: 0;
+    flex-grow: 1;
+  }
+}
+
+.top-info {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--schedule-rows-height);
+  border: 1px solid var(--color-border);
+  padding: 0;
+
+  > span {
+    display: inline-block;
+    font-weight: normal;
+    font-size: var(--text-sm);
+    color: white;
+    margin-bottom: 0;
+  }
+}
+
+.group {
+  margin-bottom: var(--space-lg);
+  flex-basis: 0;
+  flex-grow: 1;
+  border: 1px solid var(--color-border);
+
+  > ul {
+    position: relative;
+    padding: 0;
+    display: flex;
+    height: calc(var(--schedule-rows-height) * var(--schedule-rows-number));
+    overflow: visible;
+
+    &::after {
+      display: none;
+    }
+  }
+}
+
+.event {
+  position: absolute;
+  flex-shrink: 0;
+  float: left;
+  width: 100%;
+  z-index: 3;
+  transition: opacity 0.2s, background 0.2s;
+  background: var(--color-event-1);
+
+  a {
+    display: block;
+    height: 100%;
+    padding: var(--space-sm);
+    box-shadow: 0 10px 20px rgba(#000, 0.1), inset 0 -3px 0 rgba(#000, 0.2);
+    text-decoration: none;
+
+    &::before {
+      content: attr(start-time) ' - ' attr(end-time);
+      font-size: calc(var(--text-xs) * 1.05);
+    }
+  }
+}
+
+.event a::before,
+.event-name {
+  display: block;
+  color: white;
+}
+
+.event-name {
+  font-size: calc(var(--text-sm) * 1.2);
+}
