@@ -5,7 +5,7 @@
 }
 
 :root {
-  --schedule-rows-number: 20;
+  --schedule-rows-number: 36;
   --schedule-rows-height: 50px;
 
   // spacing
@@ -78,6 +78,7 @@ li {
     span {
       display: inline-block;
       transform: translateY(-50%);
+      font-size: var(--text-sm);
     }
 
     &:nth-of-type(2n) span {
@@ -107,9 +108,44 @@ li {
   width: calc(100% - 60px);
   margin-left: 60px; // same as .timelie li::after left
 
+  nav {
+    height: var(--schedule-rows-height);
+    margin-left: 2rem;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+  }
+
   > ul {
     display: flex;
     flex-wrap: nowrap;
+  }
+}
+
+.weekday {
+  width: 100%;
+
+  > li {
+    flex-basis: 0;
+    flex-grow: 1;
+  }
+}
+
+.top-info {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--schedule-rows-height);
+  border: 1px solid var(--color-border);
+  padding: 0;
+
+  > span {
+    display: inline-block;
+    font-weight: normal;
+    font-size: var(--text-sm);
+    color: white;
+    margin-bottom: 0;
   }
 }
 
@@ -129,23 +165,6 @@ li {
     &::after {
       display: none;
     }
-  }
-}
-
-.top-info {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: var(--schedule-rows-height);
-  border-bottom: 1px solid var(--color-border);
-  padding: 0;
-
-  > span {
-    display: inline-block;
-    font-weight: normal;
-    font-size: var(--text-sm);
-    margin-bottom: 0;
   }
 }
 

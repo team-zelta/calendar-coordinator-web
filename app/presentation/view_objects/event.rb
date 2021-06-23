@@ -6,7 +6,7 @@ require 'date'
 module Views
   # evnet object that shows on event.slim
   class Event
-    CALENDAR_START_HOUR = 9
+    CALENDAR_START_HOUR = 6
     CALENDAR_ROW_HEIGHT = 50 # height for a row of 30 minutes
     CALENDAR_ROW_MINUTE = 30
 

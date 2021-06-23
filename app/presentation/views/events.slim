@@ -93,105 +93,170 @@ link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/c
 
 .schedule
   .timeline 
-    ul
-      li
-        span 09:00
-      li
-        span 09:30
-      li
-        span 10:00
-      li
-        span 10:30
-      li
-        span 11:00
-      li
-        span 11:30
-      li
-        span 12:00
-      li
-        span 12:30
-      li
-        span 13:00
-      li
-        span 13:30
-      li
-        span 14:00
-      li
-        span 14:30
-      li
-        span 15:00
-      li
-        span 15:30
-      li
-        span 16:00
-      li
-        span 16:30
-      li
-        span 17:00
-      li
-        span 17:30
-      li
-        span 18:00
-      li
-        span 18:30
+    / li
+    /   span 00:00
+    / li
+    /   span 00:30
+    / li
+    /   span 01:00
+    / li
+    /   span 01:30
+    / li
+    /   span 02:00
+    / li
+    /   span 02:30
+    / li
+    /   span 03:00
+    / li
+    /   span 03:30
+    / li
+    /   span 04:00
+    / li
+    /   span 04:30
+    / li
+    /   span 05:00
+    / li
+    /   span 05:30
+    li
+      span 06:00
+    li
+      span 06:30
+    li
+      span 07:00
+    li
+      span 07:30
+    li
+      span 08:00
+    li
+      span 08:30
+    li
+      span 09:00
+    li
+      span 09:30
+    li
+      span 10:00
+    li
+      span 10:30
+    li
+      span 11:00
+    li
+      span 11:30
+    li
+      span 12:00
+    li
+      span 12:30
+    li
+      span 13:00
+    li
+      span 13:30
+    li
+      span 14:00
+    li
+      span 14:30
+    li
+      span 15:00
+    li
+      span 15:30
+    li
+      span 16:00
+    li
+      span 16:30
+    li
+      span 17:00
+    li
+      span 17:30
+    li
+      span 18:00
+    li
+      span 18:30
+    li
+      span 19:00
+    li
+      span 19:30
+    li
+      span 20:00
+    li
+      span 20:30
+    li
+      span 21:00
+    li
+      span 21:30
+    li
+      span 22:00
+    li
+      span 22:30
+    li
+      span 23:00
+    li
+      span 23:30
   .events
+    nav.navbar.sticky-top.navbar-dark.navbar-expand-lg
+      ul.navbar-nav.weekday
+        li.nav-item
+          .top-info.bg-dark
+            span Sunday #{@calendar_start_date.day}
+        li.nav-item
+          .top-info.bg-dark
+            span Monday #{@calendar_start_date.next_day(1).day}
+        li.nav-item
+          .top-info.bg-dark
+            span Tuesday #{@calendar_start_date.next_day(2).day}
+        li.nav-item
+          .top-info.bg-dark
+            span Wednesday #{@calendar_start_date.next_day(3).day}
+        li.nav-item
+          .top-info.bg-dark
+            span Thursday #{@calendar_start_date.next_day(4).day}
+        li.nav-item
+          .top-info.bg-dark
+            span Friday #{@calendar_start_date.next_day(5).day}
+        li.nav-item
+          .top-info.bg-dark
+            span Saturday #{@calendar_start_date.next_day(6).day}
+
     ul
       li.group
-        .top-info
-          span Sunday #{@calendar_start_date.day}
         ul
           - @events_list_view.sunday.each do |event| 
             li.event style="height: #{event.height}px; top: #{event.top}px"
               a start-time="#{event.start_time_str}" end-time="#{event.end_time_str}" href="#"
                 em.event-name Busy Time
       li.group
-        .top-info
-          span Monday #{@calendar_start_date.next_day(1).day}
         ul
           - @events_list_view.monday.each do |event| 
             li.event style="height: #{event.height}px; top: #{event.top}px"
               a start-time="#{event.start_time_str}" end-time="#{event.end_time_str}" href="#"
                 em.event-name Busy Time
       li.group
-        .top-info
-          span Tuesday #{@calendar_start_date.next_day(2).day} 
         ul
           - @events_list_view.tuesday.each do |event|
             li.event style="height: #{event.height}px; top: #{event.top}px"
               a start-time="#{event.start_time_str}" end-time="#{event.end_time_str}" href="#"
                 em.event-name Busy Time
       li.group
-        .top-info
-          span Wednesday #{@calendar_start_date.next_day(3).day}
         ul
           - @events_list_view.wednesday.each do |event|
             li.event style="height: #{event.height}px; top: #{event.top}px"
               a start-time="#{event.start_time_str}" end-time="#{event.end_time_str}" href="#"
                 em.event-name Busy Time
       li.group
-        .top-info
-          span Thursday #{@calendar_start_date.next_day(4).day}
         ul
           - @events_list_view.thursday.each do |event|
             li.event style="height: #{event.height}px; top: #{event.top}px"
               a start-time="#{event.start_time_str}" end-time="#{event.end_time_str}" href="#"
                 em.event-name Busy Time
       li.group
-        .top-info
-          span Friday #{@calendar_start_date.next_day(5).day}
         ul
           - @events_list_view.friday.each do |event|
             li.event style="height: #{event.height}px; top: #{event.top}px"
               a start-time="#{event.start_time_str}" end-time="#{event.end_time_str}" href="#"
                 em.event-name Busy Time
       li.group
-        .top-info
-          span Saturday #{@calendar_start_date.next_day(6).day}
         ul
           - @events_list_view.saturday.each do |event|
             li.event style="height: #{event.height}px; top: #{event.top}px"
               a start-time="#{event.start_time_str}" end-time="#{event.end_time_str}" href="#"
-                em.event-name Busy Time
+      /           em.event-name Busy Time
 
 script src="#{ENV['APP_URL']}/js/events.js"
 

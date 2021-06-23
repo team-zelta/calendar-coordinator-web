@@ -5,7 +5,7 @@
 }
 
 :root {
-  --schedule-rows-number: 20;
+  --schedule-rows-number: 36;
   --schedule-rows-height: 50px;
   --space-unit: 1em;
   --space-xxxxs: calc(0.125 * var(--space-unit));
@@ -72,6 +72,7 @@ li {
   display: inline-block;
   -webkit-transform: translateY(-50%);
           transform: translateY(-50%);
+  font-size: var(--text-sm);
 }
 
 .timeline li:nth-of-type(2n) span {
@@ -99,12 +100,62 @@ li {
   margin-left: 60px;
 }
 
+.events nav {
+  height: var(--schedule-rows-height);
+  margin-left: 2rem;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -ms-flex-wrap: nowrap;
+      flex-wrap: nowrap;
+}
+
 .events > ul {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
   -ms-flex-wrap: nowrap;
       flex-wrap: nowrap;
+}
+
+.weekday {
+  width: 100%;
+}
+
+.weekday > li {
+  -ms-flex-preferred-size: 0;
+      flex-basis: 0;
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+}
+
+.top-info {
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  height: var(--schedule-rows-height);
+  border: 1px solid var(--color-border);
+  padding: 0;
+}
+
+.top-info > span {
+  display: inline-block;
+  font-weight: normal;
+  font-size: var(--text-sm);
+  color: white;
+  margin-bottom: 0;
 }
 
 .group {
@@ -129,29 +180,6 @@ li {
 
 .group > ul::after {
   display: none;
-}
-
-.top-info {
-  width: 100%;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  height: var(--schedule-rows-height);
-  border-bottom: 1px solid var(--color-border);
-  padding: 0;
-}
-
-.top-info > span {
-  display: inline-block;
-  font-weight: normal;
-  font-size: var(--text-sm);
-  margin-bottom: 0;
 }
 
 .event {
