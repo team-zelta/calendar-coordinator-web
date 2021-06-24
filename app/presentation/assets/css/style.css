@@ -36,7 +36,11 @@
   --text-xxxl: calc(var(--text-xxl) * var(--text-scale-ratio));
   --text-xxxxl: calc(var(--text-xxxl) * var(--text-scale-ratio));
   --color-border: hsl(0, 0%, 92%);
+  --color-border-dark: hsl(0, 0%, 80%);
   --color-event-1: hsl(199, 25%, 46%);
+  --color-event-2: hsl(31, 89%, 68%);
+  --color-event-3: hsl(271, 23%, 26%);
+  --color-event-4: hsl(162, 14%, 68%);
 }
 
 li {
@@ -89,6 +93,10 @@ li {
   background: var(--color-border);
 }
 
+.timeline li:nth-of-type(2n)::after {
+  background: var(--color-border-dark);
+}
+
 .timeline li:last-of-type::after {
   display: none;
 }
@@ -102,7 +110,6 @@ li {
 
 .events nav {
   height: var(--schedule-rows-height);
-  margin-left: 2rem;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -120,13 +127,26 @@ li {
   display: flex;
   -ms-flex-wrap: nowrap;
       flex-wrap: nowrap;
+  padding-left: 0;
 }
 
-.weekday {
+.nav-users {
   width: 100%;
 }
 
-.weekday > li {
+.nav-users > li {
+  -ms-flex-preferred-size: 0;
+      flex-basis: 0;
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+}
+
+.nav-weekdays {
+  width: 100%;
+}
+
+.nav-weekdays > li {
   -ms-flex-preferred-size: 0;
       flex-basis: 0;
   -webkit-box-flex: 1;
@@ -216,5 +236,21 @@ li {
 
 .event-name {
   font-size: calc(var(--text-sm) * 1.2);
+}
+
+.event-color-1 {
+  background: var(--color-event-1);
+}
+
+.event-color-2 {
+  background: var(--color-event-2);
+}
+
+.event-color-3 {
+  background: var(--color-event-3);
+}
+
+.event-color-4 {
+  background: var(--color-event-4);
 }
 /*# sourceMappingURL=style.css.map */

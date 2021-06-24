@@ -37,11 +37,14 @@ link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/c
 
     div class="col-sm-4" style="margin-top: 10px;"
       - if (@calendar_start_date + @calendar_mode_date).year == @calendar_start_date.year && (@calendar_start_date + @calendar_mode_date).month == @calendar_start_date.month
-        h4 #{@calendar_start_date.to_time.strftime('%b')} #{@calendar_start_date.year}
+        - if event_type == 'events'
+          h4 #{@calendar_start_date.to_time.strftime('%b %d')}, #{@calendar_start_date.year}
+        - else
+          h4 #{@calendar_start_date.to_time.strftime('%b')}, #{@calendar_start_date.year}
       - elsif (@calendar_start_date + @calendar_mode_date).year == @calendar_start_date.year && (@calendar_start_date + @calendar_mode_date).month != @calendar_start_date.month
-        h4 #{@calendar_start_date.to_time.strftime('%b')} - #{(@calendar_start_date + @calendar_mode_date).to_time.strftime('%b')} #{@calendar_start_date.year}
+        h4 #{@calendar_start_date.to_time.strftime('%b')} - #{(@calendar_start_date + @calendar_mode_date).to_time.strftime('%b')}, #{@calendar_start_date.year}
       - elsif (@calendar_start_date + @calendar_mode_date).year != @calendar_start_date.year && (@calendar_start_date + @calendar_mode_date).month != @calendar_start_date.month
-        h4 #{@calendar_start_date.to_time.strftime('%b')} #{@calendar_start_date.year} - #{(@calendar_start_date + @calendar_mode_date).to_time.strftime('%b')} #{(@calendar_start_date + @calendar_mode_date).year}
+        h4 #{@calendar_start_date.to_time.strftime('%b')}, #{@calendar_start_date.year} - #{(@calendar_start_date + @calendar_mode_date).to_time.strftime('%b')}, #{(@calendar_start_date + @calendar_mode_date).year}
 
     - if @calendar_start_date && @calendar_mode_date
       div class="col-sm-2" style="margin-top: 10px;"
@@ -54,209 +57,264 @@ link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/c
           i class="fa fa-cog fa-lg" style="color:black"
 
 - if event_type == 'events'
-  div class = "row"
-    table class="table"
-      thead 
-        tr 
-          th scope="col" username
-          th scope="col" id 
-          th scope="col" summary
-          th scope="col" start_date_time
-          th scope="col" end_date_time
-      tbody 
-      - if @event_list
-          - @event_list.each do |calendar|
-              - calendar.events.each do |event|
-                tr
-                  td=calendar.username 
-                  td=event.id 
-                  td=event.summary
-                  td=event.start_date_time 
-                  td=event.end_date_time
-/ - else
-/   div class = "row"
-/     table class="table"
-/       thead 
-/         tr 
-/           th scope="col" id 
-/           th scope="col" summary
-/           th scope="col" start_date_time
-/           th scope="col" end_date_time
-/       tbody 
-/       - if @events
-/           - @events.each do |event|
-/             tr
-/               td=event.id 
-/               td=event.summary
-/               td=event.start_date_time 
-/               td=event.end_date_time
+  .schedule
+    .timeline
+      li
+        span 06:00
+      li
+        span 06:30
+      li
+        span 07:00
+      li
+        span 07:30
+      li
+        span 08:00
+      li
+        span 08:30
+      li
+        span 09:00
+      li
+        span 09:30
+      li
+        span 10:00
+      li
+        span 10:30
+      li
+        span 11:00
+      li
+        span 11:30
+      li
+        span 12:00
+      li
+        span 12:30
+      li
+        span 13:00
+      li
+        span 13:30
+      li
+        span 14:00
+      li
+        span 14:30
+      li
+        span 15:00
+      li
+        span 15:30
+      li
+        span 16:00
+      li
+        span 16:30
+      li
+        span 17:00
+      li
+        span 17:30
+      li
+        span 18:00
+      li
+        span 18:30
+      li
+        span 19:00
+      li
+        span 19:30
+      li
+        span 20:00
+      li
+        span 20:30
+      li
+        span 21:00
+      li
+        span 21:30
+      li
+        span 22:00
+      li
+        span 22:30
+      li
+        span 23:00
+      li
+        span 23:30
+    .events
+      nav.navbar.sticky-top.navbar-dark.navbar-expand-md
+        ul.navbar-nav.nav-users
+          - @calendar_list_view.each do |calendar|
+            li.nav-item
+              .top-info.bg-dark
+                span #{calendar.username}
+      ul
+        - @calendar_list_view.each_with_index do |calendar, index|
+          li.group
+            ul
+              - calendar.events.each do |event| 
+                li class="event event-color-#{(index % 4) + 1}" style="height: #{event.height}px; top: #{event.top}px; "
+                  a start-time="#{event.start_time_str}" end-time="#{event.end_time_str}" href="#"
+                    em.event-name "#{event.summary || 'Busy Time'}"
 
-.schedule
-  .timeline 
-    / li
-    /   span 00:00
-    / li
-    /   span 00:30
-    / li
-    /   span 01:00
-    / li
-    /   span 01:30
-    / li
-    /   span 02:00
-    / li
-    /   span 02:30
-    / li
-    /   span 03:00
-    / li
-    /   span 03:30
-    / li
-    /   span 04:00
-    / li
-    /   span 04:30
-    / li
-    /   span 05:00
-    / li
-    /   span 05:30
-    li
-      span 06:00
-    li
-      span 06:30
-    li
-      span 07:00
-    li
-      span 07:30
-    li
-      span 08:00
-    li
-      span 08:30
-    li
-      span 09:00
-    li
-      span 09:30
-    li
-      span 10:00
-    li
-      span 10:30
-    li
-      span 11:00
-    li
-      span 11:30
-    li
-      span 12:00
-    li
-      span 12:30
-    li
-      span 13:00
-    li
-      span 13:30
-    li
-      span 14:00
-    li
-      span 14:30
-    li
-      span 15:00
-    li
-      span 15:30
-    li
-      span 16:00
-    li
-      span 16:30
-    li
-      span 17:00
-    li
-      span 17:30
-    li
-      span 18:00
-    li
-      span 18:30
-    li
-      span 19:00
-    li
-      span 19:30
-    li
-      span 20:00
-    li
-      span 20:30
-    li
-      span 21:00
-    li
-      span 21:30
-    li
-      span 22:00
-    li
-      span 22:30
-    li
-      span 23:00
-    li
-      span 23:30
-  .events
-    nav.navbar.sticky-top.navbar-dark.navbar-expand-lg
-      ul.navbar-nav.weekday
-        li.nav-item
-          .top-info.bg-dark
-            span Sunday #{@calendar_start_date.day}
-        li.nav-item
-          .top-info.bg-dark
-            span Monday #{@calendar_start_date.next_day(1).day}
-        li.nav-item
-          .top-info.bg-dark
-            span Tuesday #{@calendar_start_date.next_day(2).day}
-        li.nav-item
-          .top-info.bg-dark
-            span Wednesday #{@calendar_start_date.next_day(3).day}
-        li.nav-item
-          .top-info.bg-dark
-            span Thursday #{@calendar_start_date.next_day(4).day}
-        li.nav-item
-          .top-info.bg-dark
-            span Friday #{@calendar_start_date.next_day(5).day}
-        li.nav-item
-          .top-info.bg-dark
-            span Saturday #{@calendar_start_date.next_day(6).day}
 
-    ul
-      li.group
-        ul
-          - @events_list_view.sunday.each do |event| 
-            li.event style="height: #{event.height}px; top: #{event.top}px"
-              a start-time="#{event.start_time_str}" end-time="#{event.end_time_str}" href="#"
-                em.event-name Busy Time
-      li.group
-        ul
-          - @events_list_view.monday.each do |event| 
-            li.event style="height: #{event.height}px; top: #{event.top}px"
-              a start-time="#{event.start_time_str}" end-time="#{event.end_time_str}" href="#"
-                em.event-name Busy Time
-      li.group
-        ul
-          - @events_list_view.tuesday.each do |event|
-            li.event style="height: #{event.height}px; top: #{event.top}px"
-              a start-time="#{event.start_time_str}" end-time="#{event.end_time_str}" href="#"
-                em.event-name Busy Time
-      li.group
-        ul
-          - @events_list_view.wednesday.each do |event|
-            li.event style="height: #{event.height}px; top: #{event.top}px"
-              a start-time="#{event.start_time_str}" end-time="#{event.end_time_str}" href="#"
-                em.event-name Busy Time
-      li.group
-        ul
-          - @events_list_view.thursday.each do |event|
-            li.event style="height: #{event.height}px; top: #{event.top}px"
-              a start-time="#{event.start_time_str}" end-time="#{event.end_time_str}" href="#"
-                em.event-name Busy Time
-      li.group
-        ul
-          - @events_list_view.friday.each do |event|
-            li.event style="height: #{event.height}px; top: #{event.top}px"
-              a start-time="#{event.start_time_str}" end-time="#{event.end_time_str}" href="#"
-                em.event-name Busy Time
-      li.group
-        ul
-          - @events_list_view.saturday.each do |event|
-            li.event style="height: #{event.height}px; top: #{event.top}px"
-              a start-time="#{event.start_time_str}" end-time="#{event.end_time_str}" href="#"
-      /           em.event-name Busy Time
+- else
+  .schedule
+    .timeline 
+      / li
+      /   span 00:00
+      / li
+      /   span 00:30
+      / li
+      /   span 01:00
+      / li
+      /   span 01:30
+      / li
+      /   span 02:00
+      / li
+      /   span 02:30
+      / li
+      /   span 03:00
+      / li
+      /   span 03:30
+      / li
+      /   span 04:00
+      / li
+      /   span 04:30
+      / li
+      /   span 05:00
+      / li
+      /   span 05:30
+      li
+        span 06:00
+      li
+        span 06:30
+      li
+        span 07:00
+      li
+        span 07:30
+      li
+        span 08:00
+      li
+        span 08:30
+      li
+        span 09:00
+      li
+        span 09:30
+      li
+        span 10:00
+      li
+        span 10:30
+      li
+        span 11:00
+      li
+        span 11:30
+      li
+        span 12:00
+      li
+        span 12:30
+      li
+        span 13:00
+      li
+        span 13:30
+      li
+        span 14:00
+      li
+        span 14:30
+      li
+        span 15:00
+      li
+        span 15:30
+      li
+        span 16:00
+      li
+        span 16:30
+      li
+        span 17:00
+      li
+        span 17:30
+      li
+        span 18:00
+      li
+        span 18:30
+      li
+        span 19:00
+      li
+        span 19:30
+      li
+        span 20:00
+      li
+        span 20:30
+      li
+        span 21:00
+      li
+        span 21:30
+      li
+        span 22:00
+      li
+        span 22:30
+      li
+        span 23:00
+      li
+        span 23:30
+    .events
+      nav.navbar.sticky-top.navbar-dark.navbar-expand-md
+        ul.navbar-nav.nav-weekdays
+          li.nav-item
+            .top-info.bg-dark
+              span Sunday #{@calendar_start_date.day}
+          li.nav-item
+            .top-info.bg-dark
+              span Monday #{@calendar_start_date.next_day(1).day}
+          li.nav-item
+            .top-info.bg-dark
+              span Tuesday #{@calendar_start_date.next_day(2).day}
+          li.nav-item
+            .top-info.bg-dark
+              span Wednesday #{@calendar_start_date.next_day(3).day}
+          li.nav-item
+            .top-info.bg-dark
+              span Thursday #{@calendar_start_date.next_day(4).day}
+          li.nav-item
+            .top-info.bg-dark
+              span Friday #{@calendar_start_date.next_day(5).day}
+          li.nav-item
+            .top-info.bg-dark
+              span Saturday #{@calendar_start_date.next_day(6).day}
+
+      ul
+        li.group
+          ul
+            - @events_list_week_view.sunday.each do |event| 
+              li.event style="height: #{event.height}px; top: #{event.top}px"
+                a start-time="#{event.start_time_str}" end-time="#{event.end_time_str}" href="#"
+                  em.event-name Busy Time
+        li.group
+          ul
+            - @events_list_week_view.monday.each do |event| 
+              li.event style="height: #{event.height}px; top: #{event.top}px"
+                a start-time="#{event.start_time_str}" end-time="#{event.end_time_str}" href="#"
+                  em.event-name Busy Time
+        li.group
+          ul
+            - @events_list_week_view.tuesday.each do |event|
+              li.event style="height: #{event.height}px; top: #{event.top}px"
+                a start-time="#{event.start_time_str}" end-time="#{event.end_time_str}" href="#"
+                  em.event-name Busy Time
+        li.group
+          ul
+            - @events_list_week_view.wednesday.each do |event|
+              li.event style="height: #{event.height}px; top: #{event.top}px"
+                a start-time="#{event.start_time_str}" end-time="#{event.end_time_str}" href="#"
+                  em.event-name Busy Time
+        li.group
+          ul
+            - @events_list_week_view.thursday.each do |event|
+              li.event style="height: #{event.height}px; top: #{event.top}px"
+                a start-time="#{event.start_time_str}" end-time="#{event.end_time_str}" href="#"
+                  em.event-name Busy Time
+        li.group
+          ul
+            - @events_list_week_view.friday.each do |event|
+              li.event style="height: #{event.height}px; top: #{event.top}px"
+                a start-time="#{event.start_time_str}" end-time="#{event.end_time_str}" href="#"
+                  em.event-name Busy Time
+        li.group
+          ul
+            - @events_list_week_view.saturday.each do |event|
+              li.event style="height: #{event.height}px; top: #{event.top}px"
+                a start-time="#{event.start_time_str}" end-time="#{event.end_time_str}" href="#"
+                  em.event-name Busy Time
 
 script src="#{ENV['APP_URL']}/js/events.js"
 

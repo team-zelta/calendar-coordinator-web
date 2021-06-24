@@ -45,7 +45,11 @@
 
   // color
   --color-border: hsl(0, 0%, 92%);
+  --color-border-dark: hsl(0, 0%, 80%);
   --color-event-1: hsl(199, 25%, 46%);
+  --color-event-2: hsl(31, 89%, 68%);
+  --color-event-3: hsl(271, 23%, 26%); // Martinique
+  --color-event-4: hsl(162, 14%, 68%); // Edward
 }
 
 li {
@@ -95,6 +99,10 @@ li {
       background: var(--color-border);
     }
 
+    &:nth-of-type(2n)::after {
+      background: var(--color-border-dark);
+    }
+
     &:last-of-type::after {
       display: none;
     }
@@ -110,7 +118,6 @@ li {
 
   nav {
     height: var(--schedule-rows-height);
-    margin-left: 2rem;
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
@@ -119,10 +126,20 @@ li {
   > ul {
     display: flex;
     flex-wrap: nowrap;
+    padding-left: 0;
   }
 }
 
-.weekday {
+.nav-users {
+  width: 100%;
+
+  > li {
+    flex-basis: 0;
+    flex-grow: 1;
+  }
+}
+
+.nav-weekdays {
   width: 100%;
 
   > li {
@@ -199,4 +216,20 @@ li {
 
 .event-name {
   font-size: calc(var(--text-sm) * 1.2);
+}
+
+.event-color-1 {
+  background: var(--color-event-1);
+}
+
+.event-color-2 {
+  background: var(--color-event-2);
+}
+
+.event-color-3 {
+  background: var(--color-event-3);
+}
+
+.event-color-4 {
+  background: var(--color-event-4);
 }
