@@ -5,7 +5,7 @@ require_relative 'event'
 
 module Views
   # Class to parse the events got from /common-busy-time into Views::Event
-  class EventList
+  class GroupEventListWeek
     attr_reader :monday, :tuesday, :wednesday, :thursday, :friday, :saturday, :sunday
 
     def initialize(events)

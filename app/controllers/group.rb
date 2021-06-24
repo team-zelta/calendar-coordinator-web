@@ -128,13 +128,14 @@ module CalendarCoordinator
                                                                    calendar_mode: calendar_mode,
                                                                    date: date,
                                                                    credentials: credentials_list)
-                  @events_list_view = Views::EventList.new(@events)
+                  @events_list_week_view = Views::GroupEventListWeek.new(@events)
                 else
-                  @event_list = calendar_service.list_events(current_account: @current_account,
-                                                             group_id: group_id,
-                                                             calendar_mode: calendar_mode,
-                                                             date: date,
-                                                             credentials: credentials_list)
+                  @calendar_list = calendar_service.list_events(current_account: @current_account,
+                                                                group_id: group_id,
+                                                                calendar_mode: calendar_mode,
+                                                                date: date,
+                                                                credentials: credentials_list)
+                  @calendar_list_view = @calendar_list.map { |calendar| Views::UserEventListDay.new(calendar) }
                 end
 
                 @group = group_service.get(@current_account, group_id)
