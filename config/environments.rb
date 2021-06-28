@@ -6,7 +6,8 @@ require 'figaro'
 require 'logger'
 require 'rack/ssl-enforcer'
 require 'rack/session/redis'
-require_relative '../app/lib/secure_session'
+
+require_app('lib')
 
 module CalendarCoordinator
   # Configuration for the API
@@ -30,6 +31,7 @@ module CalendarCoordinator
     configure do
       SecureSession.setup(ENV['REDIS_TLS_URL']) # REDIS_URL used again below
       SecureMessage.setup(ENV.delete('MSG_KEY'))
+      SignedMessage.setup(config)
     end
 
     configure :development, :test do

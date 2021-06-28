@@ -30,7 +30,7 @@ module CalendarCoordinator
 
       response =
         HTTP.post("#{@config.API_URL}/auth/sso/google",
-                  json: { access_token: access_token })
+                  json: SignedMessage.sign({ access_token: access_token }))
       raise if response.code >= 400
 
       account_info = JSON.parse(response)['data']
