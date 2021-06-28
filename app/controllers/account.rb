@@ -28,7 +28,7 @@ module CalendarCoordinator
 
           flash[:notice] = 'Register successfully, you can login now!'
           routing.redirect @login_route
-        rescue InvalidAcountError
+        rescue AccountService::InvalidAcountError
           flash[:error] = 'This Account can not be registered.'
           routing.redirect '/auth/register'
         rescue StandardError

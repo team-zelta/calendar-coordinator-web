@@ -15,8 +15,9 @@ module CalendarCoordinator
 
     # Account authenticate
     def authenticate(username:, password:)
+      signed_credential = SignedMessage.sign({ username: username, password: password })
       response = HTTP.post("#{@config.API_URL}/auth/authenticate",
-                           json: { username: username, password: password })
+                           json: signed_credential)
 
       raise(UnauthorizedError) if response.code == 403
       raise(ApiServerError) if response.code != 200
@@ -31,8 +32,9 @@ module CalendarCoordinator
 
     # Account register
     def register(username:, email:, password:)
+      account = { username: username, email: email, password: password }
       response = HTTP.post("#{@config.API_URL}/accounts",
-                           json: { username: username, email: email, password: password })
+                           json: SignedMessage.sign(account))
 
       raise InvalidAcountError unless response.code == 201
 
